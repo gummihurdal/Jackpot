@@ -57,7 +57,8 @@ def norm_name(n):
     return re.sub(r"\s+", " ", re.sub(_SUFFIX, " ", n)).strip()
 
 
-def fetch_universe(regions, rates, pharma_only=False):
+def fetch_universe(regions, rates, pharma_only=False, failed=None):
+    """failed: optional list that collects the countries whose listing could not be loaded."""
     rows = {}
     for reg in regions:
         exch, cur = REGIONS[reg]
@@ -78,6 +79,8 @@ def fetch_universe(regions, rates, pharma_only=False):
                                             sortField="intradaymarketcap", sortAsc=False))
             except Exception as e:
                 log(f"  {reg}: screen failed at {offset}: {e}")
+                if failed is not None:
+                    failed.append(reg)
                 break
             total = r.get("total", 0)
             quotes = r.get("quotes", [])

@@ -6,12 +6,12 @@ import yfinance as yf
 from .util import log, retry
 
 
-def download_weekly(symbols, chunk=40):
+def download_weekly(symbols, chunk=40, period="10y"):
     hist = {}
     for i in range(0, len(symbols), chunk):
         part = symbols[i:i + chunk]
         try:
-            df = retry(lambda: yf.download(part, period="10y", interval="1wk", progress=False,
+            df = retry(lambda: yf.download(part, period=period, interval="1wk", progress=False,
                                            auto_adjust=True, threads=True, group_by="ticker"))
             for s in part:
                 try:

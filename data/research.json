@@ -1,0 +1,212 @@
+{
+ "BRBR": {
+  "reviewed": "2026-11-17",
+  "kind": "Margin squeeze",
+  "why": "The maker of Premier Protein shakes kept growing sales in 2026 only by discounting heavily, while protein, freight and tariff costs rose. Profit margins fell sharply. The stock lost almost half its value in one day in May after a missed quarter and a cut forecast, and another fifth after the next report.",
+  "management": "A new chief executive took over during the slide. The company spent heavily on buybacks at far higher prices, and carries net debt of about 3.4 times operating profit.",
+  "verdict": "A strong brand in a growing category, priced at about 7 times last year's profit. The scan's 'profit growing' tag is misleading here: it compares with an unusually weak quarter a year ago, while the full-year margin is well down. A recovery needs prices and margins to stabilise; the debt leaves less room for error than the other names.",
+  "risks": [
+   "Margins still falling: guidance points to an EBITDA margin near 12%",
+   "Debt of about 3.4 times operating profit, the highest on this list",
+   "Protein-shake competition is forcing discounts"
+  ],
+  "watch": "The fourth-quarter report and 2027 margin guidance, due any day. Stable margins would be the first sign of a floor.",
+  "sources": [
+   {
+    "title": "Why BellRing Brands stock plunged 47% (Motley Fool, May 2026)",
+    "url": "https://www.fool.com/investing/2026/05/05/why-bellring-brands-stock-plunged-47-today/"
+   },
+   {
+    "title": "Q3 2026 call: shares sink 21% on margin pressure (Investing.com)",
+    "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-bellring-brands-shares-sink-21-on-margin-pressure-in-q3-2026-93CH-4834658"
+   },
+   {
+    "title": "Guidance cut and CEO transition (Seeking Alpha)",
+    "url": "https://seekingalpha.com/article/4952076-bellring-brands-the-protein-boom-alone-cant-save-this-company"
+   }
+  ]
+ },
+ "SFM": {
+  "reviewed": "2026-11-17",
+  "kind": "Growth slowdown",
+  "why": "Sprouts was priced as a fast grower at its June 2025 peak near $180. Then sales at existing stores slowed and turned negative: in the third quarter of 2026 they fell 0.9% with 3.3% fewer transactions. A missed quarter and a cut forecast in early November took the stock down 23% in a day.",
+  "management": "Chief executive Jack Sinclair has led the chain since 2019. The company keeps opening about 40 stores a year and has bought back about 10% of its shares in three years.",
+  "verdict": "Still a profitable grocer near record earnings, now at roughly 10 times profit instead of 30. This is a de-rating, not a broken business. A return to the old level would need shoppers to come back and the old valuation with them, which is a high bar; half-way would already be a large gain.",
+  "risks": [
+   "Management plans to cut prices from January 2027, which will pressure margins",
+   "Fourth-quarter sales at existing stores are guided 2% to 4% lower",
+   "Larger rivals such as Walmart are gaining shoppers"
+  ],
+  "watch": "Whether transactions stop falling after the January price reset. The February report is the first test.",
+  "sources": [
+   {
+    "title": "Sprouts sinks 23% on Q3 miss and guidance cut (TIKR)",
+    "url": "https://www.tikr.com/blog/sprouts-farmers-market-sinks-23-on-q3-miss-and-guidance-cut-need-to-improve-our-performance"
+   },
+   {
+    "title": "Q3 2026 earnings summary (AllInvestView)",
+    "url": "https://www.allinvestview.com/earnings/SFM/q3-2026/"
+   },
+   {
+    "title": "Same-store sales and share-price decline (Grocery Dive)",
+    "url": "https://www.grocerydive.com/news/sprouts-farmers-market-grocery-same-store-sales-share-price-declines/813086/"
+   }
+  ]
+ },
+ "ZEAL.CO": {
+  "reviewed": "2026-11-17",
+  "exclude": "the old price assumed a leading obesity drug, and the March 2026 trial result fell short of that",
+  "kind": "Trial disappointment",
+  "why": "Zealand's obesity drug petrelintide, developed with Roche, produced 10.7% weight loss after 42 weeks in its Phase 2 trial in March 2026. Investors had hoped for 13% to 20%, and a rival drug from Eli Lilly did far better. The stock fell 32% in a day.",
+  "verdict": "Kept off the list. The company is well funded and the Roche partnership continues, but the level it would have to return to was built on expectations the data did not support.",
+  "sources": [
+   {
+    "title": "Zealand slump after obesity drug data (Reuters via Stockopedia)",
+    "url": "https://www.stockopedia.com/share-prices/zealand-pharma-a-s-CPH:ZEAL/news/zealand-pharma-slump-wipes-billions-off-its-value-after-obesity-drug-data-disappoints-updated-019e6a12-a11a-7c2c-96d4-64e1e73e5426/"
+   },
+   {
+    "title": "Roche stands by petrelintide (BioSpace)",
+    "url": "https://www.biospace.com/business/roche-insists-amylin-obesity-drug-still-valuable-for-patients-who-dont-want-side-effects"
+   }
+  ]
+ },
+ "BETCO.ST": {
+  "reviewed": "2026-11-17",
+  "exclude": "Brazil banned online betting in September 2026, removing about 12% of sales, and the outcome is still open",
+  "kind": "Regulatory shock",
+  "why": "Brazil banned online betting by decree on 25 September 2026, shutting the company's fastest-growing market, worth about EUR 45m of 2026 sales. Guidance was cut, the 2027-2028 targets were withdrawn and the buyback was stopped. Profit had already fallen each year since 2022.",
+  "verdict": "Kept off the list until Brazil's Congress decides whether the ban stays, and until profit stops falling.",
+  "sources": [
+   {
+    "title": "Company update on Brazil (MFN)",
+    "url": "https://mfn.se/a/better-collective/better-collective-updates-following-regulatory-developments-in-brazil"
+   },
+   {
+    "title": "Guidance cut after the ban (SCCG)",
+    "url": "https://sccgmanagement.com/sccg-articles/2026/09/28/better-collective-cuts-2026-guidance-after-brazil-imposes-fixed-odds-betting-ban/"
+   }
+  ]
+ },
+ "ULG.SI": {
+  "reviewed": "2026-11-17",
+  "exclude": "generic rivals to its main product were approved in the US in August 2026, and no results since then show the effect",
+  "kind": "New competition",
+  "why": "UltraGreen sells a surgical dye and held about 83% of the US market. In August 2026 the FDA approved generic versions from Zydus and Provepharm, and the stock fell 35% in a day. A broker downgrade in late October took it lower.",
+  "verdict": "Kept off the list for now. The balance sheet is strong, with cash equal to half the market value, but its high margins came from having almost no competition. The first results after the generics arrive will show the new profit level.",
+  "sources": [
+   {
+    "title": "35% plunge after generic approvals (Yahoo Finance Singapore)",
+    "url": "https://sg.finance.yahoo.com/news/singapore-shares-remain-red-despite-093459929.html"
+   },
+   {
+    "title": "iFAST downgrade (Minichart)",
+    "url": "https://www.minichart.com.sg/2026/11/04/ultragreen-ai-cut-to-trim-with-usd-0-66-target-as-us-rivals-loom/"
+   }
+  ]
+ },
+ "GQG.AX": {
+  "reviewed": "2026-11-17",
+  "exclude": "clients are withdrawing money faster each month, so the reported profit is already out of date",
+  "kind": "Client withdrawals",
+  "why": "GQG earns fees on the money it manages. Clients withdrew US$32.9bn in the first ten months of 2026, and October alone took funds from US$149.2bn to US$131.6bn through withdrawals and weak performance. The stock fell about 20% on that update, to a record low, and left the ASX 200 index.",
+  "verdict": "Kept off the list. The low price-to-profit figure uses profit earned on a much larger pool of money. Founder Rajiv Jain owns about 70%, so outside holders have little say. Worth revisiting when monthly withdrawals shrink.",
+  "sources": [
+   {
+    "title": "October funds update (TipRanks)",
+    "url": "https://www.tipranks.com/news/company-announcements/gqg-partners-reports-131-6-billion-in-funds-under-management"
+   },
+   {
+    "title": "Why the stock crashed (Investing.com)",
+    "url": "https://in.investing.com/news/stock-market-news/why-is-gqg-partners-stock-crashing-today-93CH-5695959"
+   },
+   {
+    "title": "Monthly outflows triple (Money Management)",
+    "url": "https://www.moneymanagement.com.au/monthly-outflows-triple-to-us6-7bn-at-gqg"
+   }
+  ]
+ },
+ "FINV": {
+  "reviewed": "2026-11-17",
+  "exclude": "China capped loan costs at 24% from October 2025, which permanently lowered what the main business can earn",
+  "kind": "Rule change",
+  "why": "China capped the yearly cost of online loans at 24% from 1 October 2025. FinVolution's fourth-quarter profit fell 39% and the company guided 2026 revenue 5% to 15% lower. The same rule hit Qfin.",
+  "verdict": "Kept off the list. The old price was earned under the old rules. The overseas business (Indonesia, Philippines) is growing fast and is about 30% of revenue, but its profit is still small, and the Philippines is bringing in its own rate cap.",
+  "sources": [
+   {
+    "title": "Online lenders hit by profit slump after rate cap (Caixin)",
+    "url": "https://www.caixinglobal.com/2026-04-03/chinas-online-lenders-hit-by-profit-slump-after-rate-cap-102430712.html"
+   },
+   {
+    "title": "Q4 2025 earnings summary (Quartr)",
+    "url": "https://quartr.com/events/finvolution-group-finv-q4-2025_o08SCdPe"
+   }
+  ]
+ },
+ "2858.HK": {
+  "reviewed": "2026-11-17",
+  "exclude": "the stock has lost about 70% in 2026 while reported profit rose, and no clear cause was found",
+  "kind": "Unexplained fall",
+  "why": "Yixin arranges car loans in China. It reported higher first-half revenue and profit and kept its growth guidance, yet the stock has fallen about 70% this year. Commentary points to rising loan losses and a weak car market, but nothing found explains a fall of this size.",
+  "verdict": "Kept off the list. A price that collapses while reported profit grows usually means the market expects loan losses the accounts do not show yet. Until the cause is known this is exactly the kind of surprise the list is meant to avoid.",
+  "sources": [
+   {
+    "title": "H1 2026 call: growth as shares fall (Investing.com)",
+    "url": "https://in.investing.com/news/transcripts/earnings-call-transcript-yixin-group-posts-solid-h1-2026-growth-as-shares-fall-93CH-5563780"
+   },
+   {
+    "title": "Margin gains face rising credit impairment (Simply Wall St)",
+    "url": "https://simplywall.st/stocks/hk/diversified-financials/hkg-2858/yixin-group-shares/news/yixin-group-sehk2858-stock-margin-gains-face-rising-credit-i"
+   }
+  ]
+ },
+ "3200.HK": {
+  "reviewed": "2026-11-17",
+  "kind": "Newcomer, sector sell-off",
+  "why": "Han's CNC makes the drilling and processing machines used to build circuit boards, and is the largest such maker in China. It listed in Hong Kong in February 2026 at HK$95.80, ran to HK$205.80 on demand for AI server boards, then fell by about half from late September. No company-specific bad news was found: revenue doubled and profit more than tripled in the first nine months.",
+  "management": "Chairman and general manager Yang Chaohui. The parent, Han's Laser, controls the company. The shares also trade in Shenzhen, where most of the share capital sits.",
+  "verdict": "The only name here where the business is improving sharply while the price falls. The open question is the cycle: circuit-board makers buy machines in waves, and an order boom can reverse quickly. The old high was also only months after listing, so it is a weaker reference than for an older stock.",
+  "risks": [
+   "Equipment orders are highly cyclical and tied to AI data-centre spending",
+   "Less than a year of trading history in Hong Kong",
+   "Controlled by its parent company"
+  ],
+  "watch": "Full-year results in March 2027 and any comment on the order book for 2027.",
+  "sources": [
+   {
+    "title": "Revenue doubles in first nine months (Bamboo Works)",
+    "url": "https://thebambooworks.com/hans-cnc-revenue-doubles-in-first-nine-months-on-booming-demand-from-ai/"
+   },
+   {
+    "title": "Company information (etnet)",
+    "url": "https://www.etnet.com.hk/www/eng/stocks/realtime/quote_ci_brief.php?code=3200"
+   }
+  ]
+ },
+ "2367.HK": {
+  "reviewed": "2026-11-17",
+  "kind": "Brand damage",
+  "why": "Giant Biogene sells collagen skincare in China. In May 2025 a rival and a beauty blogger claimed its main product contained far less collagen than stated. Test results differed by method and the dispute faded, but sales suffered: 2025 brought the first profit decline since listing, and first-half 2026 revenue fell about 6% and profit about 20%.",
+  "management": "Chief executive Yan Jianya. The company holds net cash and has bought back shares.",
+  "verdict": "Still very profitable with no debt, but sales have not recovered yet, and management's aim of returning to growth in 2026 was missed in the first half. A recovery needs shoppers' trust to return, which the numbers do not show so far.",
+  "risks": [
+   "Sales and profit still falling in the latest half-year",
+   "Brokers see no clear trigger for a rebound",
+   "Strong competition in Chinese skincare"
+  ],
+  "watch": "Sales during the November shopping festival and the full-year report in March 2027.",
+  "sources": [
+   {
+    "title": "First post-listing profit decline (Tiger Brokers)",
+    "url": "https://www.itiger.com/news/1179050763"
+   },
+   {
+    "title": "H1 2026 profit pullback (Simply Wall St via Webull)",
+    "url": "https://www.webull.com/news/15430191781094400"
+   },
+   {
+    "title": "The original dispute (Bamboo Works)",
+    "url": "https://thebambooworks.com/biogene-gets-bruised-in-battle-of-the-skincare-belles/"
+   }
+  ]
+ }
+}

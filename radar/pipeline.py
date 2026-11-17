@@ -3,6 +3,7 @@ import argparse, json, os, re, time
 from datetime import datetime, timezone
 
 from . import config as C
+from .dossier import MIN_POTENTIAL, MIN_WEEKS, TRADABLE, build_shortlist, price_profile
 from .gates import cash_gate, filing_gate, news_gate, share_gate
 from .history import download_weekly, rebound_dna, stabilisation
 from .scores import potential_score, quality_score, safety_score, setup_score, spring_score
@@ -84,16 +85,23 @@ def match_feeds(feed, stocks):
     return rows
 
 
-def update_tracker(today, ranked, universe_price, store):
+def update_tracker(today, ranked, universe_price, store, short_list=()):
     path = os.path.join(C.DATA, "tracker.json")
     tr = json.load(open(path)) if os.path.exists(path) else {}
+    short = set(short_list)
     picks = ranked[:C.TRACK_TOP] + [m for m in ranked if m["theme"] == C.PHARMA_THEME][:C.TRACK_TOP_PHARMA]
+    picks += [m for m in ranked if m["symbol"] in short]
+    for s_, t_ in tr.items():
+        t_["short_list"] = s_ in short
     for m in picks:
+        if m["symbol"] in tr and m["symbol"] in short and not tr[m["symbol"]].get("short_since"):
+            tr[m["symbol"]]["short_since"] = today
         if m["symbol"] not in tr:
             tr[m["symbol"]] = {
                 "name": m["name"], "theme": m["theme"], "country": m["country"], "currency": m["currency"],
                 "first_seen": today, "first_price": m["price"], "first_spring": m["spring"],
                 "low_at_flag": m["low"], "high_at_flag": m["high"], "rules": C.RULES_VERSION,
+                "short_list": m["symbol"] in short, "short_since": today if m["symbol"] in short else None,
             }
     live = {m["symbol"]: m for m in ranked}
     bench = store.benchmark([t["first_seen"] for t in tr.values()])
@@ -127,7 +135,18 @@ def run(regions=None, max_deep=C.MAX_DEEP):
 
     # 1. universe ------------------------------------------------------------
     rates = fx_rates({C.REGIONS[r][1] for r in regions})
-    uni = fetch_universe(regions, rates)
+    failed = []
+    uni = fetch_universe(regions, rates, failed=failed)
+    for attempt in (1, 2):                      # the data service sometimes refuses for a minute or two
+        if not failed:
+            break
+        again, failed = sorted(set(failed)), []
+        log(f"  retrying {again} in 90 seconds")
+        time.sleep(90)
+        uni.update(fetch_universe(again, rates, failed=failed))
+    if failed:
+        # a scan on half the world would corrupt the snapshots and the tracker: stop instead
+        raise SystemExit(f"Universe incomplete, could not load: {sorted(set(failed))}. Nothing was written.")
     ph_syms = set(fetch_universe(regions, rates, pharma_only=True))
     metrics = [m for m in (basic_metrics(x, rates) for x in uni.values())
                if m and C.MIN_CAP_USD <= m["cap_usd"] <= C.MAX_CAP_USD and m["dvol_usd"] >= C.MIN_DVOL_USD]
@@ -145,9 +164,29 @@ def run(regions=None, max_deep=C.MAX_DEEP):
     ph_c = sorted((m for m in metrics if m["symbol"] in ph_syms and m["symbol"] not in chosen
                    and m["ratio"] >= C.PH_MIN_RATIO and m["pos"] <= C.PH_MAX_POS),
                   key=lambda m: -width_near(m))[:C.MAX_DEEP_PHARMA]
-    cands = main_c + ph_c
-    n_match = len(hits) + len(ph_c)
-    log(f"candidates: {len(main_c)} main track + {len(ph_c)} pharma track")
+    chosen |= {m["symbol"] for m in ph_c}
+    # third track: stocks far below a level they held within 3 years, even if the last 12 months were quiet
+    pre = [m for m in metrics if m["region"] in TRADABLE and m["pos"] <= 0.40 and m["symbol"] not in chosen]
+    fall = store.cache_load("fall")           # symbol -> the level it held; reused for a week
+    stale = [m for m in pre if not Store.fresh(fall.get(m["symbol"]), 7, m["price"])]
+    pre_hist = download_weekly([m["symbol"] for m in stale], period="5y", chunk=50)
+    for m in stale:
+        prof = price_profile(pre_hist.get(m["symbol"]) or [], m["price"])
+        if prof:
+            fall[m["symbol"]] = {"d": today, "p": m["price"],
+                                 "v": {"weeks": prof["weeks"], "held": prof["sustained_high"]}}
+    store.cache_save("fall", {k: c for k, c in fall.items() if Store.fresh(c, 30)})
+    log(f"  deep-fall pre-screen: {len(pre) - len(stale)} from cache, {len(stale)} downloaded")
+    jk_c = []
+    for m in pre:
+        c = fall.get(m["symbol"])
+        if c and c["v"]["weeks"] >= MIN_WEEKS and c["v"]["held"] / m["price"] - 1 >= MIN_POTENTIAL:
+            jk_c.append(m)
+    jk_c = sorted(jk_c, key=lambda m: -m["cap_usd"])[:400]
+    T.mark(f"deep-fall track: {len(jk_c)} of {len(pre)} quiet names sit far below a level they held")
+    cands = main_c + ph_c + jk_c
+    n_match = len(hits) + len(ph_c) + len(jk_c)
+    log(f"candidates: {len(main_c)} main track + {len(ph_c)} pharma track + {len(jk_c)} deep-fall track")
 
     # 3. deep data -----------------------------------------------------------
     hist = download_weekly([m["symbol"] for m in cands])
@@ -287,8 +326,11 @@ def run(regions=None, max_deep=C.MAX_DEEP):
         m["days_on"] = mv.get("days_on", 1)
         m["prev_spring"] = mv.get("prev_spring")
         m["is_new"] = bool(prev_date) and mv.get("first_seen") == today
-    tracker = update_tracker(today, out, {m["symbol"]: m["price"] for m in metrics}, store)
     T.mark("scores and analytics")
+    top, near = build_shortlist(out, hist, news, rates_all(rates), store, cached_fetch)
+    T.mark(f"short list: {len(top)} listed, {len(near)} near misses")
+    tracker = update_tracker(today, out, {m["symbol"]: m["price"] for m in metrics}, store,
+                             [e["symbol"] for e in top])
     watch = scan_watchlist(rates_all(rates), tmap)
     T.mark(f"watchlist: {len(watch)} names")
 
@@ -307,7 +349,8 @@ def run(regions=None, max_deep=C.MAX_DEEP):
         "countries": len(by_region), "by_country": by_region,
         "breadth": store.breadth(), "timings": T.steps, "runtime_seconds": round(time.time() - T.t0),
     }
-    json.dump(clean({"meta": meta, "stocks": out, "watch": watch, "tracker": tracker, "rejected": rejected}),
+    json.dump(clean({"meta": meta, "top": top, "near": near, "stocks": out, "watch": watch, "tracker": tracker,
+                     "rejected": rejected}),
               open(os.path.join(C.DATA, "latest.json"), "w"), separators=(",", ":"))
     slim = [{k: m.get(k) for k in ("symbol", "name", "theme", "country", "price", "currency", "pos", "ratio",
                                     "quality", "safety", "setup", "potential", "spring")} for m in out[:100]]

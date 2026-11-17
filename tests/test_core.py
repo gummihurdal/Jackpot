@@ -230,6 +230,12 @@ class Database(unittest.TestCase):
             mv = s.score_moves("2026-01-02")["AAA"]
             self.assertEqual((mv["days_on"], mv["prev_spring"], mv["first_seen"]), (2, 70, "2026-01-01"))
             self.assertEqual(s.previous_scan_date("2026-01-02"), "2026-01-01")
+            # a read must never block the write that follows it
+            s.save_scores("2026-01-03", sc(80))
+            self.assertEqual(s.previous_scan_date("2026-01-04"), "2026-01-03")
+            s.save_quotes("2026-01-03", q(13, 12))
+            self.assertIsNotNone(s.benchmark(["2026-01-01"])["2026-01-01"])
+            s.cache_save("info", {"BBB": {"d": today, "p": 1.0, "v": {}}})
 
 
 if __name__ == "__main__":

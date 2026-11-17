@@ -25,6 +25,27 @@ header.top .wrap{display:flex;justify-content:space-between;align-items:center;g
 .verdict{font-size:13.5px;font-weight:500;padding:8px 10px;border-radius:8px}
 .verdict.ok{background:#2E7D5B1f;color:var(--good)}.verdict.no{background:#A346461f;color:var(--bad)}.verdict.mid{background:#D98E2B26;color:#8a4f0b}
 .wnote{font-size:13px;color:var(--ink2)}
+#tlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;padding:14px 0 26px;align-items:start}
+.thead{grid-column:1/-1;margin-top:6px}
+.thead p{margin:2px 0 0;font-size:13.5px;color:var(--ink2)}
+.pot{flex:none;min-width:64px;padding:6px 8px;border-radius:12px;background:var(--good);color:#fff;text-align:center;font:600 17px 'IBM Plex Mono',monospace}
+.pot small{display:block;font:500 9.5px 'IBM Plex Sans',sans-serif;opacity:.9;letter-spacing:.02em}
+.why{font-size:14px;line-height:1.45}
+.why b{color:var(--deep)}
+details.file{border-top:1px solid var(--line);padding-top:8px}
+details.file summary{cursor:pointer;font-weight:600;font-size:14px;color:var(--deep);list-style:none;display:flex;justify-content:space-between}
+details.file summary::-webkit-details-marker{display:none}
+details.file summary::after{content:'+';font-family:'IBM Plex Mono',monospace}
+details.file[open] summary::after{content:'-'}
+.sec{margin-top:10px}
+.sec h3{margin:0 0 3px;font:600 11.5px 'IBM Plex Sans',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+.sec p,.sec li{font-size:13.5px;line-height:1.45;margin:0}
+.sec ul{margin:0;padding-left:18px}
+.yrs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-top:4px}
+.yrs div{background:var(--soft);border-radius:6px;padding:4px;text-align:center;font:500 12px 'IBM Plex Mono',monospace}
+.yrs span{display:block;font:10.5px 'IBM Plex Sans',sans-serif;color:var(--ink2)}
+.kind{display:inline-block;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--deep);color:#fff;margin-right:6px;vertical-align:1px}
+.pending{font-size:13px;color:#8a4f0b;background:#D98E2B26;border-radius:8px;padding:6px 9px}
 #wlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;padding:14px 0 40px}
 .tabs button{font:inherit;font-size:13.5px;font-weight:500;border:1px solid transparent;background:none;color:var(--ink2);padding:6px 9px;border-radius:999px;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--deep);color:#fff}
@@ -98,9 +119,10 @@ td.mono{font-size:13px}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="./"><i></i>Radar</a>
+  <a class="brand" href="./"><i></i>Jackpot</a>
   <div class="tabs" role="tablist">
-    <button role="tab" aria-selected="true" data-tab="radar">Radar</button>
+    <button role="tab" aria-selected="true" data-tab="top">Top 20</button>
+    <button role="tab" aria-selected="false" data-tab="radar">Radar</button>
     <button role="tab" aria-selected="false" data-tab="watch">Watch</button>
     <button role="tab" aria-selected="false" data-tab="tracker">Tracker</button>
     <button role="tab" aria-selected="false" data-tab="rejected">Rejected</button>
@@ -109,7 +131,19 @@ td.mono{font-size:13px}
 </div></header>
 
 <main class="wrap">
-  <section id="radar">
+  <section id="top">
+    <div class="hero">
+      <h1>The short list.</h1>
+      <p>At most 20 stocks, newcomers included. Each one held a much higher level for 13 weeks or more within the last three years, earned real profits at that level, is not seeing its profit collapse, and passed every safety check. Stocks at least three times below that level (+200%) come first; if fewer than 20 clear that bar, the best at +150% or more fill the rest. Open a card for the full file.</p>
+      <p class="gauge" id="tgauge"></p>
+    </div>
+    <div id="tlist"></div>
+    <h2 style="margin-top:8px">Near misses</h2>
+    <p class="note" style="padding-bottom:8px">Stocks with the same upside on paper that were kept off the list, and why.</p>
+    <div class="tw"><table id="ntable"></table></div>
+  </section>
+
+  <section id="radar" hidden>
     <div class="hero">
       <h1>Safe small and mid caps, coiled low.</h1>
       <p>Every low- and mid-cap stock on the main exchanges of <span id="nC">-</span> countries with a wide 52-week range that now trades near the bottom of it. Only companies that pass hard checks against dilution and bankruptcy are listed.</p>
@@ -153,7 +187,7 @@ td.mono{font-size:13px}
 
   <section id="tracker" hidden>
     <div class="hero"><h1>Did it work?</h1>
-      <p>The top 40 overall and the top 15 pharma names are logged with the date and price of their first appearance and re-priced on each scan. "Market" is the median return of the whole screened universe over the same days. "Edge" is the pick's return minus that. Only a positive edge over many months means the method works.</p></div>
+      <p>The top 40 overall and the top 15 pharma names are logged with the date and price of their first appearance and re-priced on each scan. "Market" is the median return of the whole screened universe over the same days. "Edge" is the pick's return minus that. Only a positive edge over many months means the method works. A star marks stocks on the Top 20 list.</p></div>
     <div class="stats" id="tstats"></div>
     <div class="tw"><table id="ttable"></table></div>
   </section>
@@ -181,7 +215,11 @@ td.mono{font-size:13px}
       <ul><li><b>Quality</b> - profits now and forecast, forward P/E, return on equity, net and gross margin, sales growth, free cash flow, analyst rating and target</li><li><b>Safety</b> - how comfortably the gate was passed. Buybacks score highest, a rising share count lowest</li><li><b>Setup</b> - range width, closeness to the low, rebound history (how often the stock fell 40%+ in 10 years and came back), and whether the price is turning, basing or still falling</li><li><b>Potential</b> (pharma only) - active Phase 3 and Phase 2 trials the company leads and how soon the next Phase 3 result is due (ClinicalTrials.gov), sales and gross margin, sales growth, analyst rating and target</li></ul>
       <h2>5. Spring score</h2>
       <p>Quality 35%, Safety 35%, Setup 30%. For pharma: Potential 30%, Safety 30%, Quality 20%, Setup 20%. Minus 12 points if the stock has been below its old peak for 3+ years. Recent headlines move the score by up to 6 points either way (buyback, raised guidance, positive trial result; or cut guidance, trial setback, legal issue).</p>
-      <h2>6. Sources and memory</h2>
+      <h2>6. The Top 20 list</h2>
+      <p>A second, much stricter pass over everything that passed the safety gate. A stock is listed only if all of this holds:</p>
+      <ul><li>It trades on a market a European private investor can normally reach (US, Canada, UK, euro area, Switzerland, Nordics, Poland, Israel, Japan, Hong Kong, Singapore, Australia, Mexico)</li><li>At least 3 years of price history, or a newcomer (listed 9 months to 3 years) that is profitable with stable or rising profit. At most 5 newcomers are listed, each marked</li><li><b>+200% test</b> - within the last 3 years it held a level at least 3 times today's price for 13 weeks or more. The distance is measured to that level, never to a one-day top. Very few stocks pass this together with the other tests, so stocks at +150% or more that pass everything else fill the list up to 20, shown separately</li><li><b>Earnings test</b> - at that old level it traded at no more than 40 times its best year's profit, so the level was earned, not hype</li><li>Profit is not collapsing (latest quarter not more than 50% below a year ago, unless it has risen two quarters running), annual profit has not fallen two years running, and the company is profitable</li><li>No research veto: when the written research finds a cause the numbers cannot see yet, such as a new competitor or a ban, the stock is moved to the near misses with that reason</li><li>No capital-raise, legal, filing or trial-setback warning, and no pending securities class action</li><li>Not more than 4 names from one theme</li></ul>
+      <p>Stocks far below an old level but quiet over the last 12 months are pulled in as well, so the list is not limited to recent crashes. Each card's file shows history, earnings by year, the real dividend record, management and owners, the spike check and the risks. "Why it fell" and the assessment are written research, added by hand and dated; a card without it says so. "+200%" is the distance back to a price the stock really held. It is not a forecast.</p>
+      <h2>7. Sources and memory</h2>
       <ul><li>Prices, fundamentals, share counts and company headlines: Yahoo Finance</li><li>Filings: SEC EDGAR</li><li>Trials: ClinicalTrials.gov</li><li>Market-wide feeds: Benzinga top stories and FDA press releases, collected every few hours</li><li>Every scan stores a snapshot of the whole universe and all scores in a local database (Parquet files read with DuckDB), which powers the score changes, the market backdrop and the Tracker's benchmark</li></ul>
       <h2>What it cannot see</h2>
       <ul><li>Why a stock fell. A failed trial, a lawsuit or a lost patent looks the same as a market panic in the numbers.</li><li>A planned share issue that has not happened yet. The gate measures the need for money and the past record, not management's intentions.</li><li>Trial quality. A Phase 3 count says the pipeline is late-stage, not that the drug works.</li><li>Fundamentals and analyst targets lag: after a sharp fall, targets are often stale and too high.</li><li>Stocks that are all one trade. Many names can be down for the same reason.</li></ul>
@@ -196,7 +234,7 @@ const price=v=>v==null?'-':v>=1000?Math.round(v).toLocaleString('en'):v>=100?v.t
 const cap=v=>v>=1e9?(v/1e9).toFixed(1)+'bn':(v/1e6).toFixed(0)+'m';
 const col=s=>s>=70?'#2E7D5B':s>=55?'#5d8a3a':s>=40?'#D98E2B':'#A34646';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let D=null, theme='All';
+let D=null, R=null, theme='All';
 
 function spark(a){
   if(!a||a.length<8) return '';
@@ -280,7 +318,69 @@ function build(){
   const cs=[...new Set(D.stocks.map(x=>x.country))].sort();
   $('#country').innerHTML='<option value="">All countries</option>'+cs.map(x=>`<option>${x}</option>`).join('');
   ['country','size','sort','noflag'].forEach(id=>$('#'+id).onchange=render);
-  render(); tracker(); rejected(); watch();
+  render(); tracker(); rejected(); watch(); toplist();
+}
+const big=v=>v==null?'-':(v<0?'-':'')+(Math.abs(v)>=1e9?(Math.abs(v)/1e9).toFixed(1)+'bn':Math.abs(v)>=1e6?(Math.abs(v)/1e6).toFixed(0)+'m':Math.abs(v).toFixed(0));
+const pct=(v,d=0)=>v==null?'-':(v*100).toFixed(d)+'%';
+const EST={recovering:['Profit recovering','good'],growing:['Profit growing','good'],stable:['Profit stable','warn'],falling:['Profit falling','bad'],'loss-making':['Loss-making','bad'],collapsing:['Profit collapsing','bad']};
+const DIV={raised:'raised in the past year',steady:'steady',cut:'cut in the past year',suspended:'suspended',none:'none paid in two years','new':'newly started'};
+function tcard(e,i){
+  const p=e.profile,er=e.earnings,dv=e.dividend,mg=e.management,r=(R||{})[e.symbol];
+  const es=EST[er.state]||[er.state,'warn'];
+  const y='https://finance.yahoo.com/quote/'+encodeURIComponent(e.symbol);
+  const yrs=(er.years||[]).slice(0,4).reverse();
+  const hist=[];
+  hist.push(`Price history on file: ${(p.weeks/52).toFixed(0)}${p.weeks>=519?'+':''} years.`);
+  if(e.dna&&e.dna.recovered) hist.push(`Fell 40%+ and came back ${e.dna.recovered} time${e.dna.recovered>1?'s':''} in that time.`);
+  if(p.normal) hist.push(`Its middle price over the four years before this one was ${price(p.normal)}; today is ${pct(Math.abs(p.vs_normal))} ${p.vs_normal<0?'below':'above'} that.`);
+  const earn=[];
+  if(er.pe_normal) earn.push(`Price is ${er.pe_normal.toFixed(1)} times its average profit of the last three years.`);
+  if(er.earnings_upside!=null) earn.push(`At 15 times that average profit the company would be worth ${er.earnings_upside>=0?'+':''}${pct(er.earnings_upside)} against today.`);
+  if(er.pe_at_high) earn.push(`At the old level it traded at ${er.pe_at_high.toFixed(0)} times its best year's profit.`);
+  if(er.yoy!=null) earn.push(`Latest quarter's profit: ${er.yoy>=0?'+':''}${pct(er.yoy)} against a year ago.`);
+  const dtxt=dv.ttm?`${price(dv.ttm)} ${esc(e.currency)} paid in the past 12 months (${pct(dv.yield_ttm,1)} of today's price), in ${dv.payments_12m} payment${dv.payments_12m>1?'s':''}. Trend: ${DIV[dv.trend]||dv.trend}. Paid in ${dv.years_paid_5} of the last 5 calendar years.`:(dv.trend==='suspended'?'Suspended: nothing paid in the past 12 months, after paying the year before.':'No dividend.');
+  const m2=[];
+  if(mg.ceo) m2.push(`Chief executive: ${esc(mg.ceo.name.replace(/\s+/g,' '))}${mg.ceo.age?', '+mg.ceo.age:''}.`);
+  if(mg.insiders!=null) m2.push(`Insiders hold ${pct(mg.insiders)}${mg.institutions!=null?', institutions '+pct(mg.institutions):''}.`);
+  if(mg.share_growth_3y!=null) m2.push(mg.buying_back?`Buying back shares: ${pct(-mg.share_growth_3y)} fewer than 3 years ago.`:`Share count ${mg.share_growth_3y>0.03?'up '+pct(mg.share_growth_3y):'flat'} over 3 years.`);
+  if(mg.short_float!=null) m2.push(`${pct(mg.short_float,1)} of the free float is sold short.`);
+  const spike=p.spike?`The very top (${price(p.peak)}) was brief. The level used here, ${price(p.sustained_high)}, held for at least 13 weeks; the price spent ${p.weeks_near_level} weeks near it.`:`No spike: the old level of ${price(p.sustained_high)} held for at least 13 weeks, and the price spent ${p.weeks_near_level} weeks near it.`;
+  return `<article class="card">
+  <div class="hd"><div class="pot">+${(p.potential*100).toFixed(0)}%<small>to old level</small></div>
+    <div class="nm"><b>${esc(e.name)}</b><span>${esc(e.symbol)} · ${esc(e.country)} · ${esc(e.theme)}</span></div>
+    <div class="rk">#${i+1}</div></div>
+  <div><div class="range"><i style="left:${Math.min(100,e.price/p.sustained_high*100).toFixed(1)}%"></i></div>
+    <div class="rl"><span>0</span><b>${price(e.price)} ${esc(e.currency)}</b><span>held ${price(p.sustained_high)}</span></div></div>
+  ${r?`<div class="why">${r.kind?`<span class="kind">${esc(r.kind)}</span>`:''}<b>Why it fell.</b> ${esc(r.why)}</div>`:'<div class="pending">Numbers checked. Written research on why it fell is still to come.</div>'}
+  <div class="tags"><span class="tag ${es[1]}">${es[0]}</span>${e.stab&&e.stab.state==='turning'?'<span class="tag good">Turning up</span>':e.stab&&e.stab.state==='falling'?'<span class="tag bad">Still falling</span>':'<span class="tag warn">Basing</span>'}${e.newcomer?'<span class="tag warn">Newcomer</span>':''}<span class="tag">${esc(e.size)} · USD ${cap(e.cap_usd)}</span>${dv.ttm?`<span class="tag">Dividend ${pct(dv.yield_ttm,1)}</span>`:''}</div>
+  <details class="file"><summary>Full file</summary>
+    ${r&&r.verdict?`<div class="sec"><h3>Assessment</h3><p>${esc(r.verdict)}</p></div>`:''}
+    <div class="sec"><h3>Business</h3><p>${esc(e.summary||'')}${e.employees?` ${Number(e.employees).toLocaleString('en')} employees.`:''}</p></div>
+    <div class="sec"><h3>History</h3><p>${hist.join(' ')}</p>${spark(e.spark)}</div>
+    <div class="sec"><h3>Earnings</h3><p>${earn.join(' ')}</p>
+      <div class="yrs">${yrs.map(q=>`<div><span>${esc(q.y)} sales</span>${big(q.rev)}</div>`).join('')}</div>
+      <div class="yrs">${yrs.map(q=>`<div><span>${esc(q.y)} profit</span>${big(q.ni)}</div>`).join('')}</div>
+      <p class="rk" style="margin-top:3px">In ${esc(er.currency||'')}</p></div>
+    <div class="sec"><h3>Dividends</h3><p>${dtxt}</p></div>
+    <div class="sec"><h3>Management and owners</h3><p>${m2.join(' ')}${r&&r.management?' '+esc(r.management):''}</p></div>
+    <div class="sec"><h3>Spike check</h3><p>${spike}</p></div>
+    <div class="sec"><h3>Safety</h3><p>${(e.safety_notes||[]).map(esc).join(' · ')}</p></div>
+    <div class="sec"><h3>Risks</h3><ul>${[...(r&&r.risks||[]),...(e.risks||[])].map(x=>`<li>${esc(x)}</li>`).join('')||'<li>None found by the checks. That is not the same as none.</li>'}</ul></div>
+    ${r&&r.watch?`<div class="sec"><h3>What to watch</h3><p>${esc(r.watch)}</p></div>`:''}
+    ${r&&r.sources&&r.sources.length?`<div class="sec"><h3>Research sources${r.reviewed?' (reviewed '+esc(r.reviewed)+')':''}</h3><ul>${r.sources.map(s=>`<li><a href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.title)}</a></li>`).join('')}</ul></div>`:''}
+    ${news(e)}
+  </details>
+  <div class="links"><a href="${y}" target="_blank" rel="noopener">Quote</a><a href="${y}/news" target="_blank" rel="noopener">News</a></div>
+</article>`;
+}
+function toplist(){
+  const tp=D.top||[], nr=D.near||[];
+  $('#tgauge').innerHTML=`<b>${tp.length}</b> of ${D.meta.passed} safe companies made the list today, <b>${tp.filter(e=>e.tier!=='B').length}</b> of them at the full +200% bar. ${nr.length} more had the upside on paper and were kept off.`;
+  const A=tp.filter(e=>e.tier!=='B'), B=tp.filter(e=>e.tier==='B');
+  const head=(t,s)=>`<div class="thead"><h2>${t}</h2><p>${s}</p></div>`;
+  $('#tlist').innerHTML=(A.length?head('At least +200% to the level it held',`${A.length} stock${A.length>1?'s':''} clear the full bar.`)+A.map(tcard).join(''):head('At least +200% to the level it held','No stock clears the full bar today.'))
+    +(B.length?head('Next best: +150% to +200%',`${B.length} stocks that pass every other test but sit just under the bar.`)+B.map((e,i)=>tcard(e,A.length+i)).join(''):'');
+  $('#ntable').innerHTML='<tr><th>Stock</th><th>To old level</th><th style="text-align:left">Why it is not on the list</th></tr>'+nr.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)} · ${esc(x.country)}</span></td><td class="mono">+${(x.potential*100).toFixed(0)}%</td><td style="text-align:left;white-space:normal">${esc(x.reason)}</td></tr>`).join('');
 }
 function watch(){
   const w=D.watch||[];
@@ -300,15 +400,16 @@ function tracker(){
   const first=t.reduce((d,x)=>x.first_seen<d?x.first_seen:d,'9999');
   const pc=(v,d=1)=>v==null?'-':(v>=0?'+':'')+(v*100).toFixed(d)+'%', cl=v=>v>0?'pos':v<0?'neg':'';
   $('#tstats').innerHTML=`<div class="stat"><b>${t.length}</b><span>stocks logged since ${first==='9999'?'-':first.slice(5)}</span></div><div class="stat"><b class="${cl(avg)}">${pc(avg)}</b><span>average return since logged</span></div><div class="stat"><b class="${cl(edge)}">${pc(edge)}</b><span>ahead of the market (edge)</span></div><div class="stat"><b>${win}/${done.length}</b><span>above logged price</span></div>`;
-  $('#ttable').innerHTML='<tr><th>Stock</th><th>Logged</th><th>Then</th><th>Now</th><th>Return</th><th>Market</th><th>Edge</th><th>Score</th></tr>'+t.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td class="mono">${x.first_seen.slice(5)}</td><td class="mono">${price(x.first_price)}</td><td class="mono">${price(x.last_price)}</td><td class="mono ${cl(x.return)}">${pc(x.return)}</td><td class="mono">${pc(x.bench)}</td><td class="mono ${cl(x.edge)}">${pc(x.edge)}</td><td class="mono">${x.first_spring}→${x.spring_now??'off'}</td></tr>`).join('');
+  $('#ttable').innerHTML='<tr><th>Stock</th><th>Logged</th><th>Then</th><th>Now</th><th>Return</th><th>Market</th><th>Edge</th><th>Score</th></tr>'+t.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td class="mono">${x.first_seen.slice(5)}</td><td class="mono">${price(x.first_price)}</td><td class="mono">${price(x.last_price)}</td><td class="mono ${cl(x.return)}">${pc(x.return)}</td><td class="mono">${pc(x.bench)}</td><td class="mono ${cl(x.edge)}">${pc(x.edge)}</td><td class="mono">${x.first_spring}→${x.spring_now??'off'}${x.short_list?' ★':''}</td></tr>`).join('');
 }
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
-  ['radar','watch','tracker','rejected','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
+  ['top','radar','watch','tracker','rejected','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
 });
 (async()=>{
   try{
     D=window.RADAR_DATA||await (await fetch('data/latest.json?'+Date.now())).json();
+    try{ R=await (await fetch('data/research.json?'+Date.now())).json(); }catch(e){ R={}; }
     build();
   }catch(e){ $('#list').innerHTML='<div class="empty">No scan data yet. The first automatic scan will fill this page.</div>'; }
 })();

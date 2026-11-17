@@ -4,7 +4,7 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, "data")
 DB = os.path.join(DATA, "db")
-RULES_VERSION = 3
+RULES_VERSION = 4
 USER_AGENT = "spring-radar/3 (github.com/gummihurdal/Jackpot)"
 # The SEC asks every automated reader to name a contact e-mail address. Put a real one of yours here,
 # or set the RADAR_CONTACT environment variable.

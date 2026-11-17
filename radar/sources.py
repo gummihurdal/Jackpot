@@ -191,6 +191,8 @@ _RULES = [
                        r"(guidance|outlook|forecast))"),
     ("insider_buying", r"(insiders? (buy|bought|purchas)|(director|ceo|chairman|cfo) (buys|bought|purchases))"),
     ("upgrade", r"\bupgrad(e|es|ed)\b"),
+    ("ceo_change", r"((ceo|chief executive)( officer)? (steps down|resigns|to step down|departs|exit|change|transition)|"
+                   r"(names|appoints|appointed) (a )?new (ceo|chief executive)|new ceo)"),
 ]
 _RULES = [(tag, re.compile(rx)) for tag, rx in _RULES]
 _LAWYER_SPAM = re.compile(r"(investor alert|shareholder alert|class action|law (firm|offices)|deadline|"

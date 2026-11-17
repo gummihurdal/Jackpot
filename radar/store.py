@@ -125,7 +125,9 @@ class Store:
     def previous_scan_date(self, today):
         if not self._has("scores"):
             return None
-        d = self.con.execute(f"SELECT max(date) FROM '{self._p('scores', '*.parquet')}' WHERE date < '{today}'").fetchone()[0]
+        rows = self.con.execute(
+            f"SELECT max(date) FROM '{self._p('scores', '*.parquet')}' WHERE date < '{today}'").fetchall()
+        d = rows[0][0] if rows else None
         return str(d) if d else None
 
     def breadth(self, limit=90):
@@ -150,6 +152,6 @@ class Store:
                      a AS (SELECT symbol, price FROM q WHERE date = (SELECT min(date) FROM q WHERE date >= '{d0}')),
                      b AS (SELECT symbol, price FROM q WHERE date = (SELECT max(date) FROM q))
                 SELECT median(b.price / a.price - 1), count(*) FROM a JOIN b USING (symbol)
-                WHERE a.price > 0""").fetchone()
-            out[d0] = float(row[0]) if row and row[0] is not None else None
+                WHERE a.price > 0""").fetchall()
+            out[d0] = float(row[0][0]) if row and row[0][0] is not None else None
         return out
