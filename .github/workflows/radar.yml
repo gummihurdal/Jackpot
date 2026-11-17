@@ -30,4 +30,6 @@ jobs:
           git config user.email "radar-bot@users.noreply.github.com"
           git add data
           git diff --cached --quiet || git commit -m "Radar scan $(date -u +%F)"
-          git push
+          git push origin HEAD:main
+          # the website is served from the gh-pages branch, keep it identical to main
+          git push --force origin HEAD:gh-pages
