@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Spring Radar - strong companies near the bottom of a wide range</title>
+<title>Spring Radar - safe low and mid caps near the bottom of a wide range</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -18,10 +18,10 @@ a{color:var(--deep)}
 .mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
 header.top{position:sticky;top:0;z-index:5;background:rgba(246,245,241,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
 header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
-.brand{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;white-space:nowrap;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
 .brand i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--accent),#8a4f0b);display:inline-block}
 .tabs{display:flex;gap:4px}
-.tabs button{font:inherit;font-size:14px;font-weight:500;border:1px solid transparent;background:none;color:var(--ink2);padding:6px 10px;border-radius:999px;cursor:pointer}
+.tabs button{font:inherit;font-size:13.5px;font-weight:500;border:1px solid transparent;background:none;color:var(--ink2);padding:6px 9px;border-radius:999px;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--deep);color:#fff}
 .hero{padding:22px 0 10px}
 .hero p{margin:8px 0 0;color:var(--ink2);max-width:62ch}
@@ -51,7 +51,7 @@ label.ck{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:cente
 .range i{position:absolute;top:-5px;width:4px;height:18px;border-radius:2px;background:var(--deep);transform:translateX(-2px)}
 .rl{display:flex;justify-content:space-between;font:12px 'IBM Plex Mono',monospace;color:var(--ink2)}
 .rl b{color:var(--ink);font-weight:500}
-.bars{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bars{display:grid;grid-template-columns:repeat(auto-fit,minmax(70px,1fr));gap:10px}
 .bar span{display:flex;justify-content:space-between;font-size:12px;color:var(--ink2)}
 .bar div{height:6px;border-radius:3px;background:var(--soft);overflow:hidden;margin-top:3px}
 .bar div i{display:block;height:100%;background:var(--deep)}
@@ -65,6 +65,8 @@ label.ck{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:cente
 .tag.warn{background:#D98E2B26;color:#8a4f0b}
 .tag.bad{background:#A346461f;color:var(--bad)}
 .dna{font-size:13px;color:var(--ink2)}
+.safe{font-size:13px;color:var(--good);border-left:3px solid var(--good);padding-left:8px}
+.pipe{font-size:13px;color:var(--deep);font-weight:500}
 svg.spark{width:100%;height:44px;display:block}
 .links{font-size:12.5px;display:flex;gap:12px}
 .empty{padding:40px 0;color:var(--ink2);text-align:center;grid-column:1/-1}
@@ -84,10 +86,11 @@ td.mono{font-size:13px}
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <a class="brand" href="./"><i></i>Spring Radar</a>
+  <a class="brand" href="./"><i></i>Radar</a>
   <div class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="radar">Radar</button>
     <button role="tab" aria-selected="false" data-tab="tracker">Tracker</button>
+    <button role="tab" aria-selected="false" data-tab="rejected">Rejected</button>
     <button role="tab" aria-selected="false" data-tab="how">Method</button>
   </div>
 </div></header>
@@ -95,12 +98,12 @@ td.mono{font-size:13px}
 <main class="wrap">
   <section id="radar">
     <div class="hero">
-      <h1>Strong companies, coiled low.</h1>
-      <p>Every large stock on the main exchanges of <span id="nC">-</span> countries, filtered to those with a wide 52-week range that now trade near the bottom of it, then scored for business strength and for how the setup looks.</p>
+      <h1>Safe small and mid caps, coiled low.</h1>
+      <p>Every low- and mid-cap stock on the main exchanges of <span id="nC">-</span> countries with a wide 52-week range that now trades near the bottom of it. Only companies that pass hard checks against dilution and bankruptcy are listed.</p>
       <div class="stats">
         <div class="stat"><b id="sU">-</b><span>stocks screened</span></div>
-        <div class="stat"><b id="sM">-</b><span>wide range, near low</span></div>
-        <div class="stat"><b id="sS">-</b><span>deep-scanned</span></div>
+        <div class="stat"><b id="sS">-</b><span>examined in depth</span></div>
+        <div class="stat"><b id="sM">-</b><span>passed the safety gate</span></div>
         <div class="stat"><b id="sD">-</b><span>last scan</span></div>
       </div>
     </div>
@@ -108,16 +111,19 @@ td.mono{font-size:13px}
       <div class="chips" id="themes"></div>
       <div class="row">
         <select id="country" aria-label="Country"></select>
+        <select id="size" aria-label="Size"><option value="">All sizes</option><option>Small cap</option><option>Mid cap</option></select>
         <select id="sort" aria-label="Sort">
           <option value="spring">Sort: Spring score</option>
           <option value="quality">Sort: Quality</option>
+          <option value="safety">Sort: Safety</option>
           <option value="setup">Sort: Setup</option>
+          <option value="potential">Sort: Pharma potential</option>
           <option value="pos">Sort: Closest to low</option>
           <option value="ratio">Sort: Widest range</option>
           <option value="upside">Sort: Analyst upside</option>
           <option value="cap_usd">Sort: Largest company</option>
+          <option value="smallest">Sort: Smallest company</option>
         </select>
-        <label class="ck"><input type="checkbox" id="nocn" checked> Hide mainland China</label>
         <label class="ck"><input type="checkbox" id="noflag"> Hide warnings</label>
       </div>
     </div>
@@ -127,27 +133,36 @@ td.mono{font-size:13px}
 
   <section id="tracker" hidden>
     <div class="hero"><h1>Did it work?</h1>
-      <p>Every stock that reaches the top 40 is logged with the date and price of its first appearance and re-priced on each scan. This is how we find out whether the method deserves trust.</p></div>
+      <p>The top 40 overall and the top 15 pharma names are logged with the date and price of their first appearance and re-priced on each scan. This is how we find out whether the method deserves trust.</p></div>
     <div class="stats" id="tstats"></div>
     <div class="tw"><table id="ttable"></table></div>
+  </section>
+
+  <section id="rejected" hidden>
+    <div class="hero"><h1>Rejected by the safety gate</h1>
+      <p>These matched the price pattern but failed a check for dilution or bankruptcy risk, so they are not on the radar. If a name you expected is missing, the reason is here.</p></div>
+    <div class="stats" id="rstats"></div>
+    <div class="tw"><table id="rtable"></table></div>
   </section>
 
   <section id="how" hidden>
     <div class="prose">
       <h1>Method</h1>
-      <p>The model is Hafnia: a very cyclical but very strong company whose price swings across a wide range. Buy near the bottom, wait.</p>
+      <p>The model is Hafnia: a very cyclical but very strong company whose price swings across a wide range. Buy near the bottom, wait. Version 2 limits this to low and mid caps and adds hard safety checks.</p>
       <h2>1. Universe</h2>
-      <p>All stocks above USD 2bn market value and USD 2m daily turnover on the primary exchanges of the countries covered. Cross-listings of the same company are merged, keeping the most traded line.</p>
-      <h2>2. Filter</h2>
-      <p>52-week high at least twice the 52-week low, and price in the lowest quarter of that range.</p>
-      <h2>3. Quality score (0-100)</h2>
-      <ul><li>Profitable now and on forecasts, and a sane forward P/E</li><li>Return on equity and profit margin</li><li>Revenue growth</li><li>Debt and free cash flow (not applied to banks and property)</li><li>Analyst rating and price-target upside</li><li>Company size</li></ul>
-      <h2>4. Setup score (0-100)</h2>
-      <ul><li><b>Range width</b> - a 4x range scores full marks</li><li><b>Closeness to the low</b></li><li><b>Rebound DNA</b> - in 10 years of prices, how often the stock fell 40% or more and then climbed back to within 10% of the old peak. A stock that has done it before is a cycle; one stuck below its old peak for 3+ years is a decline.</li><li><b>Stabilisation</b> - turning (3+ weeks since the low, 8%+ above it, rising over 4 weeks), basing, or still falling</li></ul>
+      <p>All stocks between USD 300m and USD 10bn market value, with at least USD 1m traded per day, on the primary exchanges of the countries covered. Cross-listings are merged. Mainland China A-shares are left out because they are hard to buy from Europe; Chinese companies listed in Hong Kong or the US are included.</p>
+      <h2>2. Price pattern</h2>
+      <p>52-week high at least twice the low, and price in the lowest quarter of that range. Pharma and biotech get a looser test (high 1.6 times the low, price in the lowest 40%) so that more of them are examined.</p>
+      <h2>3. Safety gate</h2>
+      <p>A company is listed only if it passes all four. Failing one puts it on the Rejected tab.</p>
+      <ul><li><b>Funding</b> - free cash flow is positive, or cash covers at least 2 years at the current burn rate</li><li><b>Debt</b> - more cash than debt, or net debt no more than 3.5 times operating profit (6 times for utilities and property)</li><li><b>Liquidity</b> - current ratio of at least 0.8</li><li><b>Dilution record</b> - share count has not grown more than 20% in 3 years</li></ul>
+      <p>Banks and insurers are judged on profitability instead of the first three.</p>
+      <h2>4. Scores (0-100)</h2>
+      <ul><li><b>Quality</b> - profits now and forecast, forward P/E, return on equity, net and gross margin, sales growth, free cash flow, analyst rating and target</li><li><b>Safety</b> - how comfortably the gate was passed. Buybacks score highest, a rising share count lowest</li><li><b>Setup</b> - range width, closeness to the low, rebound history (how often the stock fell 40%+ in 10 years and came back), and whether the price is turning, basing or still falling</li><li><b>Potential</b> (pharma only) - active Phase 3 and Phase 2 trials the company leads (ClinicalTrials.gov), sales and gross margin, sales growth, analyst rating and target</li></ul>
       <h2>5. Spring score</h2>
-      <p>Half Quality, half Setup, minus 15 points when a structural warning applies. Warnings are shown in red on the card.</p>
+      <p>Quality 35%, Safety 35%, Setup 30%. For pharma: Potential 30%, Safety 30%, Quality 20%, Setup 20%. Minus 12 points if the stock has been below its old peak for 3+ years.</p>
       <h2>What it cannot see</h2>
-      <ul><li>Why a stock fell. A scandal, a lawsuit or a lost patent looks the same as a market panic in the numbers.</li><li>Stocks that are all one trade. Many names can be down for the same reason.</li><li>Fundamentals and analyst targets lag: after a sharp fall, targets are often stale and too high.</li><li>Mainland China A-shares are scanned but hidden by default and not logged in the Tracker, because they are hard to buy from Europe.</li></ul>
+      <ul><li>Why a stock fell. A failed trial, a lawsuit or a lost patent looks the same as a market panic in the numbers.</li><li>A planned share issue that has not happened yet. The gate measures the need for money and the past record, not management's intentions.</li><li>Trial quality. A Phase 3 count says the pipeline is late-stage, not that the drug works.</li><li>Fundamentals and analyst targets lag: after a sharp fall, targets are often stale and too high.</li><li>Stocks that are all one trade. Many names can be down for the same reason.</li></ul>
     </div>
   </section>
 </main>
@@ -156,7 +171,7 @@ td.mono{font-size:13px}
 const $=s=>document.querySelector(s), fmtP=v=>v==null?'-':(v*100).toFixed(0)+'%';
 const num=(v,d=1)=>v==null?'-':Number(v).toFixed(d);
 const price=v=>v==null?'-':v>=1000?Math.round(v).toLocaleString('en'):v>=100?v.toFixed(1):v.toFixed(2);
-const cap=v=>v>=1e12?(v/1e12).toFixed(1)+'tn':v>=1e9?(v/1e9).toFixed(0)+'bn':(v/1e6).toFixed(0)+'m';
+const cap=v=>v>=1e9?(v/1e9).toFixed(1)+'bn':(v/1e6).toFixed(0)+'m';
 const col=s=>s>=70?'#2E7D5B':s>=55?'#5d8a3a':s>=40?'#D98E2B':'#A34646';
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let D=null, theme='All';
@@ -189,7 +204,11 @@ function card(m,i){
     <div class="rl"><span>${price(m.low)}</span><b>${price(m.price)} ${esc(m.currency)}</b><span>${price(m.high)}</span></div></div>
   <div class="bars">
     <div class="bar"><span>Quality<b>${m.quality}</b></span><div><i style="width:${m.quality}%"></i></div></div>
-    <div class="bar"><span>Setup<b>${m.setup}</b></span><div><i style="width:${m.setup}%"></i></div></div></div>
+    <div class="bar"><span>Safety<b>${m.safety}</b></span><div><i style="width:${m.safety}%"></i></div></div>
+    <div class="bar"><span>Setup<b>${m.setup}</b></span><div><i style="width:${m.setup}%"></i></div></div>
+    ${m.potential!=null?`<div class="bar"><span>Potential<b>${m.potential}</b></span><div><i style="width:${m.potential}%"></i></div></div>`:''}</div>
+  ${(m.safety_notes||[]).length?`<div class="safe">${m.safety_notes.map(esc).join(' · ')}</div>`:''}
+  ${m.trials?`<div class="pipe">Pipeline: ${m.trials.p3} Phase 3 and ${m.trials.p2} Phase 2 trial${m.trials.p2===1?'':'s'} active</div>`:''}
   <div class="facts">
     <div><b>x${num(m.ratio)}</b><span>range</span></div>
     <div><b>${m.pe_fwd>0?num(m.pe_fwd,0):'-'}</b><span>fwd P/E</span></div>
@@ -197,29 +216,36 @@ function card(m,i){
     <div><b>${m.upside==null?'-':(m.upside>0?'+':'')+fmtP(m.upside)}</b><span>to target</span></div></div>
   ${spark(m.spark)}
   <div class="dna">${dnaText(m)}</div>
-  <div class="tags">${stTag}<span class="tag">${fmtP(m.off_high)} below high</span><span class="tag">USD ${cap(m.cap_usd)}</span>${flags.map(f=>`<span class="tag bad">${esc(f)}</span>`).join('')}</div>
+  <div class="tags">${stTag}<span class="tag">${fmtP(m.off_high)} below high</span><span class="tag">${esc(m.size)} · USD ${cap(m.cap_usd)}</span>${flags.map(f=>`<span class="tag bad">${esc(f)}</span>`).join('')}</div>
   <div class="links"><a href="${y}" target="_blank" rel="noopener">Quote</a><a href="${y}/news" target="_blank" rel="noopener">News</a></div>
 </article>`;
 }
 function render(){
-  const c=$('#country').value, s=$('#sort').value, nf=$('#noflag').checked, nc=$('#nocn').checked&&c!=='China';
-  let a=D.stocks.filter(m=>(theme==='All'||m.theme===theme)&&(!c||m.country===c)&&(!nf||!(m.flags||[]).length)&&(!nc||!/\.(SS|SZ)$/.test(m.symbol)));
-  const asc=s==='pos';
-  a.sort((x,y)=>{const u=x[s]??(asc?9:-9),v=y[s]??(asc?9:-9);return asc?u-v:v-u});
+  const c=$('#country').value, sz=$('#size').value, nf=$('#noflag').checked;
+  let s=$('#sort').value, asc=s==='pos';
+  if(s==='smallest'){s='cap_usd';asc=true}
+  let a=D.stocks.filter(m=>(theme==='All'||m.theme===theme)&&(!c||m.country===c)&&(!sz||m.size===sz)&&(!nf||!(m.flags||[]).length));
+  if(s==='potential') a=a.filter(m=>m.potential!=null);
+  a.sort((x,y)=>{const u=x[s]??(asc?1e99:-1e99),v=y[s]??(asc?1e99:-1e99);return asc?u-v:v-u});
   $('#list').innerHTML=a.length?a.slice(0,150).map(card).join(''):'<div class="empty">Nothing matches these filters today.</div>';
 }
 function build(){
   const m=D.meta;
   $('#nC').textContent=m.countries; $('#sU').textContent=m.universe.toLocaleString('en');
-  $('#sM').textContent=m.matches; $('#sS').textContent=m.scanned; $('#sD').textContent=m.date.slice(5);
+  $('#sM').textContent=m.passed; $('#sS').textContent=m.scanned; $('#sD').textContent=m.date.slice(5);
   const cnt={}; D.stocks.forEach(x=>cnt[x.theme]=(cnt[x.theme]||0)+1);
   const order=['Mining','Pharma & Biotech','Healthcare','Finance','Staples','Defence','AI & Tech','Oil & Gas','Shipping','Power & Utilities','Industrials','Consumer','Telecom & Media','Chemicals & Materials','Real Estate','Other'];
   $('#themes').innerHTML=['All',...order.filter(t=>cnt[t])].map(t=>`<button class="chip" aria-pressed="${t===theme}" data-t="${t}">${t}<small>${t==='All'?D.stocks.length:cnt[t]}</small></button>`).join('');
   $('#themes').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; theme=b.dataset.t; document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b)); render()};
   const cs=[...new Set(D.stocks.map(x=>x.country))].sort();
   $('#country').innerHTML='<option value="">All countries</option>'+cs.map(x=>`<option>${x}</option>`).join('');
-  ['country','sort','noflag','nocn'].forEach(id=>$('#'+id).onchange=render);
-  render(); tracker();
+  ['country','size','sort','noflag'].forEach(id=>$('#'+id).onchange=render);
+  render(); tracker(); rejected();
+}
+function rejected(){
+  const r=D.rejected||[], rs=Object.entries(D.meta.reject_reasons||{}).sort((a,b)=>b[1]-a[1]);
+  $('#rstats').innerHTML=`<div class="stat"><b>${r.length}</b><span>rejected</span></div>`+rs.slice(0,3).map(([k,v])=>`<div class="stat"><b>${v}</b><span>${esc(k.replace(/ N /g,' ... ').replace(/ N$/,''))}</span></div>`).join('');
+  $('#rtable').innerHTML='<tr><th>Stock</th><th style="text-align:left">Why it was rejected</th></tr>'+r.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td style="text-align:left;white-space:normal">${esc(x.reason)}</td></tr>`).join('');
 }
 function tracker(){
   const t=Object.entries(D.tracker||{}).map(([s,v])=>({symbol:s,...v}));
@@ -232,7 +258,7 @@ function tracker(){
 }
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
-  ['radar','tracker','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
+  ['radar','tracker','rejected','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
 });
 (async()=>{
   try{
