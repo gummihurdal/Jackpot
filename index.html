@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Spring Radar - strong companies near the bottom of a wide range</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5F1;--panel:#FFFFFF;--ink:#16181D;--ink2:#555A63;--line:#E2E0D8;--deep:#1E2A44;--accent:#D98E2B;--good:#2E7D5B;--bad:#A34646;--soft:#EEF1F6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 'IBM Plex Sans',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px))}
+h1,h2{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;margin:0}
+h1{font-size:clamp(30px,6vw,48px)}
+h2{font-size:22px;margin:0 0 8px}
+a{color:var(--deep)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+header.top{position:sticky;top:0;z-index:5;background:rgba(246,245,241,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.brand{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:19px;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--accent),#8a4f0b);display:inline-block}
+.tabs{display:flex;gap:4px}
+.tabs button{font:inherit;font-size:14px;font-weight:500;border:1px solid transparent;background:none;color:var(--ink2);padding:6px 10px;border-radius:999px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--deep);color:#fff}
+.hero{padding:22px 0 10px}
+.hero p{margin:8px 0 0;color:var(--ink2);max-width:62ch}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 6px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.stat b{display:block;font:500 20px/1.1 'IBM Plex Mono',monospace}
+.stat span{font-size:12px;color:var(--ink2)}
+.controls{position:sticky;top:51px;z-index:4;background:var(--bg);padding:10px 0 8px;border-bottom:1px solid var(--line)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--deep);border-color:var(--deep);color:#fff}
+.chip small{opacity:.65;margin-left:4px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+select{font:inherit;font-size:14px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);color:var(--ink);min-width:0;flex:1 1 130px}
+label.ck{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:center;white-space:nowrap}
+#list{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;padding:14px 0 40px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.card.flagged{border-left:4px solid var(--bad)}
+.hd{display:flex;gap:10px;align-items:flex-start}
+.score{flex:none;width:48px;height:48px;border-radius:12px;display:grid;place-items:center;color:#fff;font:600 19px 'IBM Plex Mono',monospace}
+.nm{min-width:0;flex:1}
+.nm b{display:block;font-size:16px;line-height:1.25;overflow-wrap:anywhere}
+.nm span{font-size:12.5px;color:var(--ink2)}
+.rk{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink2)}
+.range{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,#2E7D5B33,#D98E2B33,#A3464633);margin:16px 0 2px}
+.range i{position:absolute;top:-5px;width:4px;height:18px;border-radius:2px;background:var(--deep);transform:translateX(-2px)}
+.rl{display:flex;justify-content:space-between;font:12px 'IBM Plex Mono',monospace;color:var(--ink2)}
+.rl b{color:var(--ink);font-weight:500}
+.bars{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.bar span{display:flex;justify-content:space-between;font-size:12px;color:var(--ink2)}
+.bar div{height:6px;border-radius:3px;background:var(--soft);overflow:hidden;margin-top:3px}
+.bar div i{display:block;height:100%;background:var(--deep)}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.facts div{background:var(--soft);border-radius:8px;padding:6px 4px;text-align:center}
+.facts b{display:block;font:500 13.5px 'IBM Plex Mono',monospace}
+.facts span{font-size:10.5px;color:var(--ink2)}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tag{font-size:11.5px;padding:3px 8px;border-radius:999px;background:var(--soft);color:var(--deep)}
+.tag.good{background:#2E7D5B1f;color:var(--good)}
+.tag.warn{background:#D98E2B26;color:#8a4f0b}
+.tag.bad{background:#A346461f;color:var(--bad)}
+.dna{font-size:13px;color:var(--ink2)}
+svg.spark{width:100%;height:44px;display:block}
+.links{font-size:12.5px;display:flex;gap:12px}
+.empty{padding:40px 0;color:var(--ink2);text-align:center;grid-column:1/-1}
+table{width:100%;border-collapse:collapse;font-size:14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th,td{padding:9px 10px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+th:first-child,td:first-child{text-align:left;white-space:normal}
+th{font-size:12px;color:var(--ink2);font-weight:500;background:var(--soft)}
+td.mono{font-size:13px}
+.tw{overflow-x:auto;margin:12px 0 40px}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+.prose{max-width:66ch;padding:18px 0 50px}
+.prose li{margin:.35em 0}
+.note{font-size:12.5px;color:var(--ink2);padding:0 0 30px}
+[hidden]{display:none!important}
+@media(max-width:520px){.stats{grid-template-columns:repeat(2,1fr)}.controls{top:49px}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><i></i>Spring Radar</a>
+  <div class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="radar">Radar</button>
+    <button role="tab" aria-selected="false" data-tab="tracker">Tracker</button>
+    <button role="tab" aria-selected="false" data-tab="how">Method</button>
+  </div>
+</div></header>
+
+<main class="wrap">
+  <section id="radar">
+    <div class="hero">
+      <h1>Strong companies, coiled low.</h1>
+      <p>Every large stock on the main exchanges of <span id="nC">-</span> countries, filtered to those with a wide 52-week range that now trade near the bottom of it, then scored for business strength and for how the setup looks.</p>
+      <div class="stats">
+        <div class="stat"><b id="sU">-</b><span>stocks screened</span></div>
+        <div class="stat"><b id="sM">-</b><span>wide range, near low</span></div>
+        <div class="stat"><b id="sS">-</b><span>deep-scanned</span></div>
+        <div class="stat"><b id="sD">-</b><span>last scan</span></div>
+      </div>
+    </div>
+    <div class="controls">
+      <div class="chips" id="themes"></div>
+      <div class="row">
+        <select id="country" aria-label="Country"></select>
+        <select id="sort" aria-label="Sort">
+          <option value="spring">Sort: Spring score</option>
+          <option value="quality">Sort: Quality</option>
+          <option value="setup">Sort: Setup</option>
+          <option value="pos">Sort: Closest to low</option>
+          <option value="ratio">Sort: Widest range</option>
+          <option value="upside">Sort: Analyst upside</option>
+          <option value="cap_usd">Sort: Largest company</option>
+        </select>
+        <label class="ck"><input type="checkbox" id="nocn" checked> Hide mainland China</label>
+        <label class="ck"><input type="checkbox" id="noflag"> Hide warnings</label>
+      </div>
+    </div>
+    <div id="list"></div>
+    <p class="note">Data: Yahoo Finance via an automated daily scan. Scores are a mechanical screen, not advice. Always check a live quote and the latest news before acting.</p>
+  </section>
+
+  <section id="tracker" hidden>
+    <div class="hero"><h1>Did it work?</h1>
+      <p>Every stock that reaches the top 40 is logged with the date and price of its first appearance and re-priced on each scan. This is how we find out whether the method deserves trust.</p></div>
+    <div class="stats" id="tstats"></div>
+    <div class="tw"><table id="ttable"></table></div>
+  </section>
+
+  <section id="how" hidden>
+    <div class="prose">
+      <h1>Method</h1>
+      <p>The model is Hafnia: a very cyclical but very strong company whose price swings across a wide range. Buy near the bottom, wait.</p>
+      <h2>1. Universe</h2>
+      <p>All stocks above USD 2bn market value and USD 2m daily turnover on the primary exchanges of the countries covered. Cross-listings of the same company are merged, keeping the most traded line.</p>
+      <h2>2. Filter</h2>
+      <p>52-week high at least twice the 52-week low, and price in the lowest quarter of that range.</p>
+      <h2>3. Quality score (0-100)</h2>
+      <ul><li>Profitable now and on forecasts, and a sane forward P/E</li><li>Return on equity and profit margin</li><li>Revenue growth</li><li>Debt and free cash flow (not applied to banks and property)</li><li>Analyst rating and price-target upside</li><li>Company size</li></ul>
+      <h2>4. Setup score (0-100)</h2>
+      <ul><li><b>Range width</b> - a 4x range scores full marks</li><li><b>Closeness to the low</b></li><li><b>Rebound DNA</b> - in 10 years of prices, how often the stock fell 40% or more and then climbed back to within 10% of the old peak. A stock that has done it before is a cycle; one stuck below its old peak for 3+ years is a decline.</li><li><b>Stabilisation</b> - turning (3+ weeks since the low, 8%+ above it, rising over 4 weeks), basing, or still falling</li></ul>
+      <h2>5. Spring score</h2>
+      <p>Half Quality, half Setup, minus 15 points when a structural warning applies. Warnings are shown in red on the card.</p>
+      <h2>What it cannot see</h2>
+      <ul><li>Why a stock fell. A scandal, a lawsuit or a lost patent looks the same as a market panic in the numbers.</li><li>Stocks that are all one trade. Many names can be down for the same reason.</li><li>Fundamentals and analyst targets lag: after a sharp fall, targets are often stale and too high.</li><li>Mainland China A-shares are scanned but hidden by default and not logged in the Tracker, because they are hard to buy from Europe.</li></ul>
+    </div>
+  </section>
+</main>
+
+<script>
+const $=s=>document.querySelector(s), fmtP=v=>v==null?'-':(v*100).toFixed(0)+'%';
+const num=(v,d=1)=>v==null?'-':Number(v).toFixed(d);
+const price=v=>v==null?'-':v>=1000?Math.round(v).toLocaleString('en'):v>=100?v.toFixed(1):v.toFixed(2);
+const cap=v=>v>=1e12?(v/1e12).toFixed(1)+'tn':v>=1e9?(v/1e9).toFixed(0)+'bn':(v/1e6).toFixed(0)+'m';
+const col=s=>s>=70?'#2E7D5B':s>=55?'#5d8a3a':s>=40?'#D98E2B':'#A34646';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let D=null, theme='All';
+
+function spark(a){
+  if(!a||a.length<8) return '';
+  const w=300,h=44,mn=Math.min(...a),mx=Math.max(...a),r=mx-mn||1;
+  const pts=a.map((v,i)=>(i/(a.length-1)*w).toFixed(1)+','+(h-3-(v-mn)/r*(h-6)).toFixed(1)).join(' ');
+  return `<svg class="spark" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="Two-year weekly price"><polyline points="${pts}" fill="none" stroke="#1E2A44" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg>`;
+}
+function dnaText(m){
+  const d=m.dna; if(!d) return 'Too little price history to judge past rebounds.';
+  let t;
+  if(d.recovered>0){
+    t=`Fell 40%+ and recovered ${d.recovered} time${d.recovered>1?'s':''} in 10 years`;
+    if(d.median_weeks){const mo=Math.max(1,Math.round(d.median_weeks/4.35)); t+=`, typically ${mo} month${mo>1?'s':''} from the bottom`;}
+    t+='.';
+  } else t='No completed 40% fall-and-recovery in the last 10 years.';
+  return t;
+}
+function card(m,i){
+  const st=(m.stab||{}).state, flags=m.flags||[];
+  const stTag=st==='turning'?'<span class="tag good">Turning up</span>':st==='basing'?'<span class="tag warn">Basing</span>':st==='falling'?'<span class="tag bad">Still falling</span>':'';
+  const y='https://finance.yahoo.com/quote/'+encodeURIComponent(m.symbol);
+  return `<article class="card${flags.length?' flagged':''}">
+  <div class="hd"><div class="score" style="background:${col(m.spring)}">${m.spring}</div>
+    <div class="nm"><b>${esc(m.name)}</b><span>${esc(m.symbol)} · ${esc(m.country)} · ${esc(m.theme)}</span></div>
+    <div class="rk">#${i+1}</div></div>
+  <div><div class="range"><i style="left:${(m.pos*100).toFixed(1)}%"></i></div>
+    <div class="rl"><span>${price(m.low)}</span><b>${price(m.price)} ${esc(m.currency)}</b><span>${price(m.high)}</span></div></div>
+  <div class="bars">
+    <div class="bar"><span>Quality<b>${m.quality}</b></span><div><i style="width:${m.quality}%"></i></div></div>
+    <div class="bar"><span>Setup<b>${m.setup}</b></span><div><i style="width:${m.setup}%"></i></div></div></div>
+  <div class="facts">
+    <div><b>x${num(m.ratio)}</b><span>range</span></div>
+    <div><b>${m.pe_fwd>0?num(m.pe_fwd,0):'-'}</b><span>fwd P/E</span></div>
+    <div><b>${m.rev_growth==null?'-':(m.rev_growth>0?'+':'')+fmtP(m.rev_growth)}</b><span>sales</span></div>
+    <div><b>${m.upside==null?'-':(m.upside>0?'+':'')+fmtP(m.upside)}</b><span>to target</span></div></div>
+  ${spark(m.spark)}
+  <div class="dna">${dnaText(m)}</div>
+  <div class="tags">${stTag}<span class="tag">${fmtP(m.off_high)} below high</span><span class="tag">USD ${cap(m.cap_usd)}</span>${flags.map(f=>`<span class="tag bad">${esc(f)}</span>`).join('')}</div>
+  <div class="links"><a href="${y}" target="_blank" rel="noopener">Quote</a><a href="${y}/news" target="_blank" rel="noopener">News</a></div>
+</article>`;
+}
+function render(){
+  const c=$('#country').value, s=$('#sort').value, nf=$('#noflag').checked, nc=$('#nocn').checked&&c!=='China';
+  let a=D.stocks.filter(m=>(theme==='All'||m.theme===theme)&&(!c||m.country===c)&&(!nf||!(m.flags||[]).length)&&(!nc||!/\.(SS|SZ)$/.test(m.symbol)));
+  const asc=s==='pos';
+  a.sort((x,y)=>{const u=x[s]??(asc?9:-9),v=y[s]??(asc?9:-9);return asc?u-v:v-u});
+  $('#list').innerHTML=a.length?a.slice(0,150).map(card).join(''):'<div class="empty">Nothing matches these filters today.</div>';
+}
+function build(){
+  const m=D.meta;
+  $('#nC').textContent=m.countries; $('#sU').textContent=m.universe.toLocaleString('en');
+  $('#sM').textContent=m.matches; $('#sS').textContent=m.scanned; $('#sD').textContent=m.date.slice(5);
+  const cnt={}; D.stocks.forEach(x=>cnt[x.theme]=(cnt[x.theme]||0)+1);
+  const order=['Mining','Pharma & Biotech','Healthcare','Finance','Staples','Defence','AI & Tech','Oil & Gas','Shipping','Power & Utilities','Industrials','Consumer','Telecom & Media','Chemicals & Materials','Real Estate','Other'];
+  $('#themes').innerHTML=['All',...order.filter(t=>cnt[t])].map(t=>`<button class="chip" aria-pressed="${t===theme}" data-t="${t}">${t}<small>${t==='All'?D.stocks.length:cnt[t]}</small></button>`).join('');
+  $('#themes').onclick=e=>{const b=e.target.closest('.chip'); if(!b) return; theme=b.dataset.t; document.querySelectorAll('.chip').forEach(x=>x.setAttribute('aria-pressed',x===b)); render()};
+  const cs=[...new Set(D.stocks.map(x=>x.country))].sort();
+  $('#country').innerHTML='<option value="">All countries</option>'+cs.map(x=>`<option>${x}</option>`).join('');
+  ['country','sort','noflag','nocn'].forEach(id=>$('#'+id).onchange=render);
+  render(); tracker();
+}
+function tracker(){
+  const t=Object.entries(D.tracker||{}).map(([s,v])=>({symbol:s,...v}));
+  t.sort((a,b)=>(b.return??0)-(a.return??0));
+  const done=t.filter(x=>x.return!=null), avg=done.length?done.reduce((s,x)=>s+x.return,0)/done.length:0;
+  const win=done.filter(x=>x.return>0).length;
+  const first=t.reduce((d,x)=>x.first_seen<d?x.first_seen:d,'9999');
+  $('#tstats').innerHTML=`<div class="stat"><b>${t.length}</b><span>stocks logged</span></div><div class="stat"><b class="${avg>=0?'pos':'neg'}">${(avg*100).toFixed(1)}%</b><span>average since logged</span></div><div class="stat"><b>${win}/${done.length}</b><span>above logged price</span></div><div class="stat"><b>${first==='9999'?'-':first.slice(5)}</b><span>tracking since</span></div>`;
+  $('#ttable').innerHTML='<tr><th>Stock</th><th>Logged</th><th>Then</th><th>Now</th><th>Return</th><th>Score then</th><th>Now</th></tr>'+t.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td class="mono">${x.first_seen.slice(5)}</td><td class="mono">${price(x.first_price)}</td><td class="mono">${price(x.last_price)}</td><td class="mono ${x.return>0?'pos':x.return<0?'neg':''}">${x.return==null?'-':(x.return>=0?'+':'')+(x.return*100).toFixed(1)+'%'}</td><td class="mono">${x.first_spring}</td><td class="mono">${x.spring_now??'off'}</td></tr>`).join('');
+}
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  ['radar','tracker','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
+});
+(async()=>{
+  try{
+    D=window.RADAR_DATA||await (await fetch('data/latest.json?'+Date.now())).json();
+    build();
+  }catch(e){ $('#list').innerHTML='<div class="empty">No scan data yet. The first automatic scan will fill this page.</div>'; }
+})();
+</script>
+</body>
+</html>
