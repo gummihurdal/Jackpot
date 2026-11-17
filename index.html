@@ -20,7 +20,12 @@ header.top{position:sticky;top:0;z-index:5;background:rgba(246,245,241,.96);back
 header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
 .brand{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;white-space:nowrap;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
 .brand i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--accent),#8a4f0b);display:inline-block}
-.tabs{display:flex;gap:4px}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.verdict{font-size:13.5px;font-weight:500;padding:8px 10px;border-radius:8px}
+.verdict.ok{background:#2E7D5B1f;color:var(--good)}.verdict.no{background:#A346461f;color:var(--bad)}.verdict.mid{background:#D98E2B26;color:#8a4f0b}
+.wnote{font-size:13px;color:var(--ink2)}
+#wlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;padding:14px 0 40px}
 .tabs button{font:inherit;font-size:13.5px;font-weight:500;border:1px solid transparent;background:none;color:var(--ink2);padding:6px 9px;border-radius:999px;cursor:pointer}
 .tabs button[aria-selected=true]{background:var(--deep);color:#fff}
 .hero{padding:22px 0 10px}
@@ -67,6 +72,13 @@ label.ck{font-size:13px;color:var(--ink2);display:flex;gap:6px;align-items:cente
 .dna{font-size:13px;color:var(--ink2)}
 .safe{font-size:13px;color:var(--good);border-left:3px solid var(--good);padding-left:8px}
 .pipe{font-size:13px;color:var(--deep);font-weight:500}
+.news{border-top:1px solid var(--line);padding-top:8px;display:grid;gap:7px}
+.news a{font-size:13px;line-height:1.35;text-decoration:none;color:var(--ink);display:block}
+.news a:hover{text-decoration:underline}
+.news small{display:block;color:var(--ink2);font-size:11.5px;margin-top:1px}
+.chg{font:500 11px 'IBM Plex Mono',monospace;display:block;text-align:right;margin-top:2px}
+.gauge{margin:10px 0 0;font-size:13.5px;color:var(--ink2)}
+.gauge b{color:var(--ink)}
 svg.spark{width:100%;height:44px;display:block}
 .links{font-size:12.5px;display:flex;gap:12px}
 .empty{padding:40px 0;color:var(--ink2);text-align:center;grid-column:1/-1}
@@ -89,6 +101,7 @@ td.mono{font-size:13px}
   <a class="brand" href="./"><i></i>Radar</a>
   <div class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="radar">Radar</button>
+    <button role="tab" aria-selected="false" data-tab="watch">Watch</button>
     <button role="tab" aria-selected="false" data-tab="tracker">Tracker</button>
     <button role="tab" aria-selected="false" data-tab="rejected">Rejected</button>
     <button role="tab" aria-selected="false" data-tab="how">Method</button>
@@ -100,6 +113,7 @@ td.mono{font-size:13px}
     <div class="hero">
       <h1>Safe small and mid caps, coiled low.</h1>
       <p>Every low- and mid-cap stock on the main exchanges of <span id="nC">-</span> countries with a wide 52-week range that now trades near the bottom of it. Only companies that pass hard checks against dilution and bankruptcy are listed.</p>
+      <p class="gauge" id="gauge"></p>
       <div class="stats">
         <div class="stat"><b id="sU">-</b><span>stocks screened</span></div>
         <div class="stat"><b id="sS">-</b><span>examined in depth</span></div>
@@ -131,9 +145,15 @@ td.mono{font-size:13px}
     <p class="note">Data: Yahoo Finance via an automated daily scan. Scores are a mechanical screen, not advice. Always check a live quote and the latest news before acting.</p>
   </section>
 
+  <section id="watch" hidden>
+    <div class="hero"><h1>Watchlist</h1>
+      <p>Names added by hand. They go through the same checks as the radar but are always shown, with a plain verdict, even when they are too large, not near their low, or fail the safety gate.</p></div>
+    <div id="wlist"></div>
+  </section>
+
   <section id="tracker" hidden>
     <div class="hero"><h1>Did it work?</h1>
-      <p>The top 40 overall and the top 15 pharma names are logged with the date and price of their first appearance and re-priced on each scan. This is how we find out whether the method deserves trust.</p></div>
+      <p>The top 40 overall and the top 15 pharma names are logged with the date and price of their first appearance and re-priced on each scan. "Market" is the median return of the whole screened universe over the same days. "Edge" is the pick's return minus that. Only a positive edge over many months means the method works.</p></div>
     <div class="stats" id="tstats"></div>
     <div class="tw"><table id="ttable"></table></div>
   </section>
@@ -154,13 +174,15 @@ td.mono{font-size:13px}
       <h2>2. Price pattern</h2>
       <p>52-week high at least twice the low, and price in the lowest quarter of that range. Pharma and biotech get a looser test (high 1.6 times the low, price in the lowest 40%) so that more of them are examined.</p>
       <h2>3. Safety gate</h2>
-      <p>A company is listed only if it passes all four. Failing one puts it on the Rejected tab.</p>
-      <ul><li><b>Funding</b> - free cash flow is positive, or cash covers at least 2 years at the current burn rate</li><li><b>Debt</b> - more cash than debt, or net debt no more than 3.5 times operating profit (6 times for utilities and property)</li><li><b>Liquidity</b> - current ratio of at least 0.8</li><li><b>Dilution record</b> - share count has not grown more than 20% in 3 years</li></ul>
+      <p>A company is listed only if it passes every stage. Failing one puts it on the Rejected tab with the reason.</p>
+      <ul><li><b>Funding</b> - free cash flow is positive, or cash covers at least 2 years at the current burn rate</li><li><b>Debt</b> - more cash than debt, or net debt no more than 3.5 times operating profit (6 times for utilities and property)</li><li><b>Liquidity</b> - current ratio of at least 0.8</li><li><b>Dilution record</b> - share count has not grown more than 20% in 3 years, corrected for stock splits</li><li><b>SEC filings</b> (US-listed) - rejected for a bankruptcy, delisting-notice, withdrawn-accounts or late-report filing in the past year; a cash-burning company is also rejected if it filed a prospectus or issued unregistered shares in the past 6 months</li><li><b>News</b> - rejected for a distress headline in the past 90 days, or a capital-raise headline while burning cash</li></ul>
       <p>Banks and insurers are judged on profitability instead of the first three.</p>
       <h2>4. Scores (0-100)</h2>
-      <ul><li><b>Quality</b> - profits now and forecast, forward P/E, return on equity, net and gross margin, sales growth, free cash flow, analyst rating and target</li><li><b>Safety</b> - how comfortably the gate was passed. Buybacks score highest, a rising share count lowest</li><li><b>Setup</b> - range width, closeness to the low, rebound history (how often the stock fell 40%+ in 10 years and came back), and whether the price is turning, basing or still falling</li><li><b>Potential</b> (pharma only) - active Phase 3 and Phase 2 trials the company leads (ClinicalTrials.gov), sales and gross margin, sales growth, analyst rating and target</li></ul>
+      <ul><li><b>Quality</b> - profits now and forecast, forward P/E, return on equity, net and gross margin, sales growth, free cash flow, analyst rating and target</li><li><b>Safety</b> - how comfortably the gate was passed. Buybacks score highest, a rising share count lowest</li><li><b>Setup</b> - range width, closeness to the low, rebound history (how often the stock fell 40%+ in 10 years and came back), and whether the price is turning, basing or still falling</li><li><b>Potential</b> (pharma only) - active Phase 3 and Phase 2 trials the company leads and how soon the next Phase 3 result is due (ClinicalTrials.gov), sales and gross margin, sales growth, analyst rating and target</li></ul>
       <h2>5. Spring score</h2>
-      <p>Quality 35%, Safety 35%, Setup 30%. For pharma: Potential 30%, Safety 30%, Quality 20%, Setup 20%. Minus 12 points if the stock has been below its old peak for 3+ years.</p>
+      <p>Quality 35%, Safety 35%, Setup 30%. For pharma: Potential 30%, Safety 30%, Quality 20%, Setup 20%. Minus 12 points if the stock has been below its old peak for 3+ years. Recent headlines move the score by up to 6 points either way (buyback, raised guidance, positive trial result; or cut guidance, trial setback, legal issue).</p>
+      <h2>6. Sources and memory</h2>
+      <ul><li>Prices, fundamentals, share counts and company headlines: Yahoo Finance</li><li>Filings: SEC EDGAR</li><li>Trials: ClinicalTrials.gov</li><li>Market-wide feeds: Benzinga top stories and FDA press releases, collected every few hours</li><li>Every scan stores a snapshot of the whole universe and all scores in a local database (Parquet files read with DuckDB), which powers the score changes, the market backdrop and the Tracker's benchmark</li></ul>
       <h2>What it cannot see</h2>
       <ul><li>Why a stock fell. A failed trial, a lawsuit or a lost patent looks the same as a market panic in the numbers.</li><li>A planned share issue that has not happened yet. The gate measures the need for money and the past record, not management's intentions.</li><li>Trial quality. A Phase 3 count says the pipeline is late-stage, not that the drug works.</li><li>Fundamentals and analyst targets lag: after a sharp fall, targets are often stale and too high.</li><li>Stocks that are all one trade. Many names can be down for the same reason.</li></ul>
     </div>
@@ -192,6 +214,19 @@ function dnaText(m){
   } else t='No completed 40% fall-and-recovery in the last 10 years.';
   return t;
 }
+const TAGS={buyback:['Buyback','good'],trial_win:['Positive trial or approval','good'],guidance_raise:['Raised guidance','good'],insider_buying:['Insider buying','good'],upgrade:['Upgrade','good'],downgrade:['Downgrade','bad'],guidance_cut:['Cut guidance','bad'],trial_setback:['Trial setback','bad'],legal:['Legal issue','bad'],dilution:['Capital raise','bad']};
+function chg(m){
+  if(m.prev_spring==null) return '';
+  const d=m.spring-m.prev_spring; if(!d) return '';
+  return `<span class="chg ${d>0?'pos':'neg'}">${d>0?'+':''}${d}</span>`;
+}
+function news(m){
+  const n=m.news||[]; if(!n.length) return '';
+  return '<div class="news">'+n.map(x=>{
+    const tg=(x.tags||[]).filter(k=>TAGS[k]).map(k=>`<span class="tag ${TAGS[k][1]}">${TAGS[k][0]}</span>`).join(' ');
+    return `<a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}<small>${esc(x.ts.slice(0,10))} · ${esc(x.publisher)} ${tg}</small></a>`;
+  }).join('')+'</div>';
+}
 function card(m,i){
   const st=(m.stab||{}).state, flags=m.flags||[];
   const stTag=st==='turning'?'<span class="tag good">Turning up</span>':st==='basing'?'<span class="tag warn">Basing</span>':st==='falling'?'<span class="tag bad">Still falling</span>':'';
@@ -199,7 +234,9 @@ function card(m,i){
   return `<article class="card${flags.length?' flagged':''}">
   <div class="hd"><div class="score" style="background:${col(m.spring)}">${m.spring}</div>
     <div class="nm"><b>${esc(m.name)}</b><span>${esc(m.symbol)} · ${esc(m.country)} · ${esc(m.theme)}</span></div>
-    <div class="rk">#${i+1}</div></div>
+    <div class="rk">${m.verdict?'':'#'+(i+1)}${chg(m)}</div></div>
+  ${m.verdict?`<div class="verdict ${m.fits?'ok':m.ok?'mid':'no'}">${esc(m.verdict)}</div>`:''}
+  ${m.note?`<div class="wnote">${esc(m.note)}</div>`:''}
   <div><div class="range"><i style="left:${(m.pos*100).toFixed(1)}%"></i></div>
     <div class="rl"><span>${price(m.low)}</span><b>${price(m.price)} ${esc(m.currency)}</b><span>${price(m.high)}</span></div></div>
   <div class="bars">
@@ -208,7 +245,7 @@ function card(m,i){
     <div class="bar"><span>Setup<b>${m.setup}</b></span><div><i style="width:${m.setup}%"></i></div></div>
     ${m.potential!=null?`<div class="bar"><span>Potential<b>${m.potential}</b></span><div><i style="width:${m.potential}%"></i></div></div>`:''}</div>
   ${(m.safety_notes||[]).length?`<div class="safe">${m.safety_notes.map(esc).join(' · ')}</div>`:''}
-  ${m.trials?`<div class="pipe">Pipeline: ${m.trials.p3} Phase 3 and ${m.trials.p2} Phase 2 trial${m.trials.p2===1?'':'s'} active</div>`:''}
+  ${m.trials?`<div class="pipe">Pipeline: ${m.trials.p3} Phase 3 and ${m.trials.p2} Phase 2 trial${m.trials.p2===1?'':'s'} active${m.trials.next_p3?`<br>Next Phase 3 result expected around ${esc(m.trials.next_p3.date)}${m.trials.next_p3.condition?' ('+esc(m.trials.next_p3.condition)+')':''}`:''}</div>`:''}
   <div class="facts">
     <div><b>x${num(m.ratio)}</b><span>range</span></div>
     <div><b>${m.pe_fwd>0?num(m.pe_fwd,0):'-'}</b><span>fwd P/E</span></div>
@@ -216,7 +253,8 @@ function card(m,i){
     <div><b>${m.upside==null?'-':(m.upside>0?'+':'')+fmtP(m.upside)}</b><span>to target</span></div></div>
   ${spark(m.spark)}
   <div class="dna">${dnaText(m)}</div>
-  <div class="tags">${stTag}<span class="tag">${fmtP(m.off_high)} below high</span><span class="tag">${esc(m.size)} · USD ${cap(m.cap_usd)}</span>${flags.map(f=>`<span class="tag bad">${esc(f)}</span>`).join('')}</div>
+  <div class="tags">${m.is_new?'<span class="tag good">New today</span>':''}${stTag}<span class="tag">${fmtP(m.off_high)} below high</span><span class="tag">${esc(m.size)} · USD ${cap(m.cap_usd)}</span>${m.next_earnings?`<span class="tag">Results ${esc(m.next_earnings.slice(5))}</span>`:''}${flags.map(f=>`<span class="tag bad">${esc(f)}</span>`).join('')}</div>
+  ${news(m)}
   <div class="links"><a href="${y}" target="_blank" rel="noopener">Quote</a><a href="${y}/news" target="_blank" rel="noopener">News</a></div>
 </article>`;
 }
@@ -231,6 +269,8 @@ function render(){
 }
 function build(){
   const m=D.meta;
+  const br=(m.breadth||[]).slice(-1)[0];
+  if(br) $('#gauge').innerHTML=`Market backdrop: <b>${(br.washed*100).toFixed(0)}%</b> of all low and mid caps worldwide are washed out today (wide range, bottom quarter). Scan took ${Math.round((m.runtime_seconds||0)/60)} min.`;
   $('#nC').textContent=m.countries; $('#sU').textContent=m.universe.toLocaleString('en');
   $('#sM').textContent=m.passed; $('#sS').textContent=m.scanned; $('#sD').textContent=m.date.slice(5);
   const cnt={}; D.stocks.forEach(x=>cnt[x.theme]=(cnt[x.theme]||0)+1);
@@ -240,7 +280,11 @@ function build(){
   const cs=[...new Set(D.stocks.map(x=>x.country))].sort();
   $('#country').innerHTML='<option value="">All countries</option>'+cs.map(x=>`<option>${x}</option>`).join('');
   ['country','size','sort','noflag'].forEach(id=>$('#'+id).onchange=render);
-  render(); tracker(); rejected();
+  render(); tracker(); rejected(); watch();
+}
+function watch(){
+  const w=D.watch||[];
+  $('#wlist').innerHTML=w.length?w.map((m,i)=>m.price?card(m,i):`<article class="card flagged"><div class="nm"><b>${esc(m.name)}</b><span>${esc(m.symbol)}</span></div><div class="verdict no">${esc(m.verdict)}</div>${m.note?`<div class="wnote">${esc(m.note)}</div>`:''}</article>`).join(''):'<div class="empty">The watchlist is empty. Add symbols to data/watchlist.json.</div>';
 }
 function rejected(){
   const r=D.rejected||[], rs=Object.entries(D.meta.reject_reasons||{}).sort((a,b)=>b[1]-a[1]);
@@ -251,14 +295,16 @@ function tracker(){
   const t=Object.entries(D.tracker||{}).map(([s,v])=>({symbol:s,...v}));
   t.sort((a,b)=>(b.return??0)-(a.return??0));
   const done=t.filter(x=>x.return!=null), avg=done.length?done.reduce((s,x)=>s+x.return,0)/done.length:0;
+  const eg=t.filter(x=>x.edge!=null), edge=eg.length?eg.reduce((s,x)=>s+x.edge,0)/eg.length:0;
   const win=done.filter(x=>x.return>0).length;
   const first=t.reduce((d,x)=>x.first_seen<d?x.first_seen:d,'9999');
-  $('#tstats').innerHTML=`<div class="stat"><b>${t.length}</b><span>stocks logged</span></div><div class="stat"><b class="${avg>=0?'pos':'neg'}">${(avg*100).toFixed(1)}%</b><span>average since logged</span></div><div class="stat"><b>${win}/${done.length}</b><span>above logged price</span></div><div class="stat"><b>${first==='9999'?'-':first.slice(5)}</b><span>tracking since</span></div>`;
-  $('#ttable').innerHTML='<tr><th>Stock</th><th>Logged</th><th>Then</th><th>Now</th><th>Return</th><th>Score then</th><th>Now</th></tr>'+t.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td class="mono">${x.first_seen.slice(5)}</td><td class="mono">${price(x.first_price)}</td><td class="mono">${price(x.last_price)}</td><td class="mono ${x.return>0?'pos':x.return<0?'neg':''}">${x.return==null?'-':(x.return>=0?'+':'')+(x.return*100).toFixed(1)+'%'}</td><td class="mono">${x.first_spring}</td><td class="mono">${x.spring_now??'off'}</td></tr>`).join('');
+  const pc=(v,d=1)=>v==null?'-':(v>=0?'+':'')+(v*100).toFixed(d)+'%', cl=v=>v>0?'pos':v<0?'neg':'';
+  $('#tstats').innerHTML=`<div class="stat"><b>${t.length}</b><span>stocks logged since ${first==='9999'?'-':first.slice(5)}</span></div><div class="stat"><b class="${cl(avg)}">${pc(avg)}</b><span>average return since logged</span></div><div class="stat"><b class="${cl(edge)}">${pc(edge)}</b><span>ahead of the market (edge)</span></div><div class="stat"><b>${win}/${done.length}</b><span>above logged price</span></div>`;
+  $('#ttable').innerHTML='<tr><th>Stock</th><th>Logged</th><th>Then</th><th>Now</th><th>Return</th><th>Market</th><th>Edge</th><th>Score</th></tr>'+t.map(x=>`<tr><td><b>${esc(x.name)}</b><br><span class="rk">${esc(x.symbol)} · ${esc(x.theme)}</span></td><td class="mono">${x.first_seen.slice(5)}</td><td class="mono">${price(x.first_price)}</td><td class="mono">${price(x.last_price)}</td><td class="mono ${cl(x.return)}">${pc(x.return)}</td><td class="mono">${pc(x.bench)}</td><td class="mono ${cl(x.edge)}">${pc(x.edge)}</td><td class="mono">${x.first_spring}→${x.spring_now??'off'}</td></tr>`).join('');
 }
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
-  ['radar','tracker','rejected','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
+  ['radar','watch','tracker','rejected','how'].forEach(id=>$('#'+id).hidden=id!==b.dataset.tab); scrollTo(0,0);
 });
 (async()=>{
   try{
