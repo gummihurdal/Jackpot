@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Leveraged ETFs explained - a learning page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F6F5F1;--panel:#FFFFFF;--ink:#16181D;--ink2:#555A63;--line:#E2E0D8;--deep:#1E2A44;--accent:#D98E2B;--good:#2E7D5B;--bad:#A34646;--soft:#EEF1F6}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 'IBM Plex Sans',system-ui,sans-serif;-webkit-text-size-adjust:100%}
+.wrap{max-width:1080px;margin:0 auto;padding:0 max(16px,env(safe-area-inset-left,0px))}
+h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.15;margin:0}
+h1{font-size:clamp(30px,6vw,46px)}
+h2{font-size:clamp(22px,4vw,28px);margin:0 0 10px}
+h3{font-size:18px}
+p{margin:0 0 12px}
+a{color:var(--deep)}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+header.top{position:sticky;top:0;z-index:5;background:rgba(246,245,241,.96);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+header.top .wrap{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:10px}
+.brand{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:17px;white-space:nowrap;text-decoration:none;color:var(--ink);display:flex;align-items:center;gap:8px}
+.brand i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--accent),#8a4f0b);display:inline-block}
+.jump{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.jump::-webkit-scrollbar{display:none}
+.jump a{font-size:13.5px;font-weight:500;color:var(--ink2);padding:6px 9px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.jump a:hover{background:var(--soft);color:var(--deep)}
+.hero{padding:26px 0 6px}
+.hero p{color:var(--ink2);max-width:62ch;margin-top:10px}
+section{padding:26px 0 6px;scroll-margin-top:60px}
+.prose{max-width:68ch}
+.lead{font-size:17px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:14px 0}
+.kicker{font:500 12px 'IBM Plex Mono',monospace;color:var(--ink2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:8px 8px;text-align:right;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+th{font-size:12px;color:var(--ink2);font-weight:500}
+tr:last-child td{border-bottom:0;font-weight:600}
+td{font-family:'IBM Plex Mono',monospace;font-size:13.5px}
+td:first-child{font-family:inherit;font-size:14px}
+.pos{color:var(--good)}.neg{color:var(--bad)}
+.verdict{font-size:13.5px;margin:10px 0 0;color:var(--ink2)}
+.calc label{display:flex;justify-content:space-between;font-size:14px;margin-top:10px}
+.calc label b{font:500 14px 'IBM Plex Mono',monospace}
+input[type=range]{width:100%;accent-color:var(--deep);margin:4px 0 0}
+.out{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.out div{background:var(--soft);border-radius:10px;padding:10px 6px;text-align:center}
+.out b{display:block;font:500 19px/1.1 'IBM Plex Mono',monospace}
+.out span{font-size:11.5px;color:var(--ink2)}
+#calcNote{font-size:13.5px;color:var(--ink2);margin:10px 0 0;min-height:3em}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none;position:sticky;top:49px;background:var(--bg);z-index:3}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:6px 11px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed=true]{background:var(--deep);border-color:var(--deep);color:#fff}
+#cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px;padding:6px 0 10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:9px}
+.tk{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.t{font:500 14px 'IBM Plex Mono',monospace;padding:4px 9px;border-radius:8px;color:#fff;background:var(--good)}
+.t.bear{background:var(--bad)}
+.lev{margin-left:auto;font:500 12px 'IBM Plex Mono',monospace;color:var(--ink2);border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+.card h3{font-size:17px}
+.sub{font-size:12.5px;color:var(--ink2);margin-top:2px}
+.what{font-size:14px;margin:0}
+.ex{font-size:13.5px;background:var(--soft);border-radius:10px;padding:8px 10px;margin:0}
+.ex b,.fit b,.care b{font-weight:600}
+.fit,.care{font-size:13.5px;margin:0;padding-left:9px;border-left:3px solid var(--good)}
+.care{border-left-color:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--ink2);margin:0 0 6px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;background:var(--good)}
+.legend i.b{background:var(--bad)}
+ol.rules{padding-left:20px;margin:0;max-width:68ch}
+ol.rules li{margin:.5em 0}
+.cmp td,.cmp th{text-align:left;font-family:inherit;font-size:14px;vertical-align:top}
+.cmp tr:last-child td{font-weight:400}
+.tw{overflow-x:auto}
+.note{font-size:12.5px;color:var(--ink2);padding:26px 0 40px;max-width:72ch}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="../"><i></i>Radar</a>
+  <nav class="jump" aria-label="On this page">
+    <a href="#what">Basics</a>
+    <a href="#reset">Daily reset</a>
+    <a href="#list">Instruments</a>
+    <a href="#futures">vs futures</a>
+    <a href="#rules">Rules</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+  <div class="hero">
+    <div class="kicker">Learning page</div>
+    <h1>Leveraged ETFs, one by one.</h1>
+    <p>What funds like TNA, SOXL and TQQQ are, how the daily reset works, and for each one: what it follows, an example, and the market conditions it suits.</p>
+  </div>
+
+  <section id="what">
+    <h2>The basics</h2>
+    <div class="prose">
+      <p class="lead">A leveraged ETF is a fund you buy like a normal share. It multiplies the <b>daily</b> move of an index by 2 or 3.</p>
+      <p>Take TNA. It follows the Russell 2000, an index of about 2,000 small US companies, at 3x. If the Russell 2000 rises 1% today, TNA rises about 3%. If the index falls 2%, TNA falls about 6%.</p>
+      <p>Most of these funds come in pairs. The <b>bull</b> fund rises when the index rises. The <b>bear</b> fund does the opposite: it rises when the index falls. TNA is the bull fund on small caps and TZA is its bear twin.</p>
+      <p>You never borrow money yourself. The fund does the leverage inside, using contracts with banks. The most you can lose is what you put in.</p>
+    </div>
+  </section>
+
+  <section id="reset">
+    <h2>The daily reset: the one thing to understand</h2>
+    <div class="prose">
+      <p>The 3x holds for <b>one day</b>. Every evening the fund resets, and the next day starts fresh at 3x. Over several days the result is not simply 3x the index. It depends on the path the index took.</p>
+    </div>
+    <div class="two">
+      <div class="panel">
+        <div class="kicker">Choppy market: leverage hurts</div>
+        <table>
+          <tr><th></th><th>Index</th><th>3x fund</th></tr>
+          <tr><td>Start</td><td>100.00</td><td>100.00</td></tr>
+          <tr><td>Day 1: index −10%</td><td>90.00</td><td>70.00</td></tr>
+          <tr><td>Day 2: index +11.1%</td><td>100.00</td><td>93.33</td></tr>
+          <tr><td>Result</td><td>0.0%</td><td class="neg">−6.7%</td></tr>
+        </table>
+        <p class="verdict">The index is back where it started. The 3x fund has lost money. This is called decay, and it adds up in sideways markets.</p>
+      </div>
+      <div class="panel">
+        <div class="kicker">Steady trend: leverage helps</div>
+        <table>
+          <tr><th></th><th>Index</th><th>3x fund</th></tr>
+          <tr><td>Start</td><td>100.00</td><td>100.00</td></tr>
+          <tr><td>5 days of +2% each</td><td>110.41</td><td>133.82</td></tr>
+          <tr><td>3x the index gain</td><td></td><td>+31.2%</td></tr>
+          <tr><td>Result</td><td class="pos">+10.4%</td><td class="pos">+33.8%</td></tr>
+        </table>
+        <p class="verdict">When the index moves the same way day after day, the fund does better than 3x. So these funds reward clean trends and punish zigzags.</p>
+      </div>
+    </div>
+
+    <div class="panel calc">
+      <div class="kicker">Try it: two days</div>
+      <label for="d1">Day 1 index move <b id="d1v"></b></label>
+      <input type="range" id="d1" min="-10" max="10" step="0.5" value="-5">
+      <label for="d2">Day 2 index move <b id="d2v"></b></label>
+      <input type="range" id="d2" min="-10" max="10" step="0.5" value="5">
+      <div class="out">
+        <div><b id="oI"></b><span>Index after 2 days</span></div>
+        <div><b id="oB"></b><span>3x bull fund</span></div>
+        <div><b id="oS"></b><span>3x bear fund</span></div>
+      </div>
+      <p id="calcNote"></p>
+    </div>
+  </section>
+
+  <section id="list">
+    <h2>The instruments</h2>
+    <p class="legend"><span><i></i>Bull: rises when the index rises</span><span><i class="b"></i>Bear: rises when the index falls</span></p>
+    <div class="chips" id="chips" role="group" aria-label="Filter by group"></div>
+    <div id="cards"></div>
+  </section>
+
+  <section id="futures">
+    <h2>Leveraged ETF or futures?</h2>
+    <div class="panel tw">
+      <table class="cmp">
+        <tr><th></th><th>Leveraged ETF (e.g. TNA)</th><th>Futures (e.g. RTY, M2K)</th></tr>
+        <tr><td>Where it trades</td><td>Like a share, in a normal broker account</td><td>Futures exchange, needs a futures account</td></tr>
+        <tr><td>Leverage</td><td>Fixed 2x or 3x, reset every day</td><td>From margin, depends on your position size</td></tr>
+        <tr><td>Decay</td><td>Yes, in choppy markets</td><td>None, tracks the index directly</td></tr>
+        <tr><td>Hours</td><td>US market hours, thin before and after</td><td>Almost 24 hours, Sunday evening to Friday</td></tr>
+        <tr><td>Most you can lose</td><td>What you put in</td><td>More than your margin</td></tr>
+        <tr><td>Expiry</td><td>None</td><td>Quarterly, must be rolled</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>Six rules before trading one</h2>
+    <ol class="rules">
+      <li><b>Know the index behind it.</b> You are trading the index, three times over. If you have no view on the index, you have no trade.</li>
+      <li><b>Cut your size to a third.</b> 1,000 in a 3x fund swings about as much per day as 3,000 in the index.</li>
+      <li><b>Decide the exit before the entry.</b> Set a stop and a target. A 3x fund can drop 10% in a morning.</li>
+      <li><b>Trade trends, skip chop.</b> These funds work on days and weeks when the index moves clearly one way. In sideways markets they bleed.</li>
+      <li><b>Think in days, not months.</b> The longer you hold, the further the result drifts from 3x. If you have to hold a position for several weeks, a 2x fund or the plain index fund is the calmer tool.</li>
+      <li><b>Check the volume.</b> The big ones (TQQQ, SOXL, SPXL, TNA) trade easily. The small ones have wide gaps between buy and sell price, which costs money on every trade.</li>
+    </ol>
+  </section>
+
+  <p class="note">This page is for learning and is not investment advice. Examples use round numbers to show the mechanics and are not forecasts. Funds get renamed, merged and closed, so check the issuer's page (Direxion, ProShares, GraniteShares, MicroSectors) before trading a ticker. Written 17 November 2026.</p>
+</main>
+
+<script>
+const GROUPS=[["all","All"],["index","Indexes"],["sector","Sectors"],["bond","Bonds"],["commodity","Commodities"],["stock","Single stocks"]];
+const D=[
+{g:"index",bull:["TQQQ"],bear:["SQQQ"],lev:"3x",name:"Nasdaq-100",by:"ProShares",
+ what:"The 100 largest non-financial companies on Nasdaq. Heavy in big tech: Nvidia, Apple, Microsoft, Amazon.",
+ ex:"Nasdaq-100 up 1.5% on the day: TQQQ about +4.5%, SQQQ about −4.5%.",
+ fit:"Days when big tech leads the whole market, such as after strong earnings from a giant or a clear market rally. SQQQ as a short hedge when you expect a tech sell-off.",
+ care:"Weeks when tech goes up and down without direction. This is the most traded leveraged fund, so it is easy to get in and out."},
+{g:"index",bull:["SPXL","UPRO"],bear:["SPXS","SPXU"],lev:"3x",name:"S&P 500",by:"Direxion (SPXL, SPXS) and ProShares (UPRO, SPXU)",
+ what:"The 500 largest US companies. The broadest and calmest index in this list.",
+ ex:"S&P 500 down 1%: SPXL and UPRO about −3%, SPXS and SPXU about +3%.",
+ fit:"Days when the whole market moves together: a central bank decision, inflation data, a jobs report. The best place to start learning, because the index moves less than the others.",
+ care:"Calm does not mean safe. A 3% drop in the S&P 500, which happens a few times a year, is about −9% here."},
+{g:"index",bull:["TNA"],bear:["TZA"],lev:"3x",name:"Russell 2000 (small caps)",by:"Direxion",
+ what:"About 2,000 small US companies. They depend on bank loans and the US economy more than the giants do.",
+ ex:"Russell 2000 down 2% before the open: TNA about −6%, TZA about +6%.",
+ fit:"When interest rates are expected to fall or the economy looks strong, money flows into small caps and they can run for days. TZA when fear of recession or higher rates hits.",
+ care:"Small caps swing more than the S&P 500, so the decay in sideways weeks is larger."},
+{g:"index",bull:["UDOW"],bear:["SDOW"],lev:"3x",name:"Dow Jones 30",by:"ProShares",
+ what:"30 large, established US companies: banks, industry, healthcare, consumer brands. Less tech than the other indexes.",
+ ex:"Dow up 0.8%: UDOW about +2.4%, SDOW about −2.4%.",
+ fit:"When money moves out of tech into older, steadier companies. Useful when you think the market rises but tech does not lead.",
+ care:"Lower trading volume than TQQQ or SPXL."},
+{g:"index",bull:["QLD","SSO"],bear:["QID","SDS"],lev:"2x",name:"Nasdaq-100 and S&P 500 at 2x",by:"ProShares",
+ what:"QLD and QID follow the Nasdaq-100, SSO and SDS the S&P 500, at two times instead of three.",
+ ex:"S&P 500 up 1%: SSO about +2%, SDS about −2%.",
+ fit:"When you want leverage but need to hold for more than a few days. Less decay and smaller daily swings than the 3x funds.",
+ care:"Still resets daily, so the drift over weeks is smaller but not zero."},
+
+{g:"sector",bull:["SOXL"],bear:["SOXS"],lev:"3x",name:"Semiconductors",by:"Direxion",
+ what:"Chip makers: Nvidia, Broadcom, AMD, TSMC, Micron and others. The engine behind the AI boom.",
+ ex:"Chip index up 4% after strong Nvidia results: SOXL about +12%. The same in reverse on a bad day.",
+ fit:"Clear momentum days driven by chip or AI news. Chips often move 3 to 4% in a day, so the trend is easy to see when it is there.",
+ care:"The wildest of the large funds. Daily moves above 10% are normal, in both directions. Small size and a firm stop."},
+{g:"sector",bull:["TECL"],bear:["TECS"],lev:"3x",name:"Technology sector",by:"Direxion",
+ what:"The tech companies inside the S&P 500. Apple, Microsoft and Nvidia make up a large part of it.",
+ ex:"Tech sector up 2%: TECL about +6%, TECS about −6%.",
+ fit:"When you want big-tech exposure that is a little broader than chips alone, for example in an earnings week for the software and hardware giants.",
+ care:"Three companies dominate it, so one bad report can move the whole fund."},
+{g:"sector",bull:["FAS"],bear:["FAZ"],lev:"3x",name:"Financials",by:"Direxion",
+ what:"Large US banks, insurers and payment companies: JPMorgan, Berkshire Hathaway, Visa, Bank of America.",
+ ex:"Financials up 1.5% on strong bank earnings: FAS about +4.5%.",
+ fit:"Bank earnings season, and periods when long-term interest rates rise faster than short-term ones, which helps bank profits.",
+ care:"In a banking scare this falls very fast. FAZ exists for that case."},
+{g:"sector",bull:["DPST"],bear:[],lev:"3x",name:"Regional banks",by:"Direxion",
+ what:"Smaller US banks that lend to local businesses and property owners.",
+ ex:"Regional bank index up 3% on rate-cut hopes: DPST about +9%.",
+ fit:"A rebound after a bank scare has passed, or when rate cuts lift pressure from the smaller banks.",
+ care:"One of the riskiest funds here. Regional banks can fall 5% or more in a day when one bank gets into trouble."},
+{g:"sector",bull:["LABU"],bear:["LABD"],lev:"3x",name:"Biotech",by:"Direxion",
+ what:"A broad basket of US biotech companies, with small ones counting as much as large ones.",
+ ex:"Biotech index up 3% on a wave of takeover news: LABU about +9%, LABD about −9%.",
+ fit:"When the whole sector moves: a run of takeovers, falling interest rates, or a strong period of drug approvals.",
+ care:"It is a sector bet. It does not capture one company's drug approval. Biotech is jumpy, so decay is heavy."},
+{g:"sector",bull:["DRN"],bear:["DRV"],lev:"3x",name:"Real estate",by:"Direxion",
+ what:"US property companies (REITs): warehouses, data centres, cell towers, apartments.",
+ ex:"Real estate index up 1.2% as bond yields fall: DRN about +3.6%.",
+ fit:"When interest rates fall, property companies usually rise. DRV when rates jump.",
+ care:"Low trading volume, so wider gaps between buy and sell price."},
+{g:"sector",bull:["RETL"],bear:[],lev:"3x",name:"Retail",by:"Direxion",
+ what:"US shops and online sellers, from clothing chains to car dealers.",
+ ex:"Retail index up 2% after strong holiday sales data: RETL about +6%.",
+ fit:"Around consumer spending reports and the holiday shopping season.",
+ care:"Small fund with thin trading. Check the volume before using it."},
+{g:"sector",bull:["ERX"],bear:["ERY"],lev:"2x",name:"Energy",by:"Direxion",
+ what:"Large US oil and gas companies such as Exxon Mobil and Chevron.",
+ ex:"Energy sector up 2.5% as oil jumps: ERX about +5%, ERY about −5%.",
+ fit:"When the oil price trends clearly, for example after a decision by the oil-producing countries or a supply shock.",
+ care:"Follows oil companies, not the oil price itself. They usually move together, but not always."},
+{g:"sector",bull:["NUGT"],bear:["DUST"],lev:"2x",name:"Gold miners",by:"Direxion",
+ what:"Companies that mine gold. Their profits swing more than the gold price does.",
+ ex:"Gold up 1.5%, miners up 4%: NUGT about +8%, DUST about −8%.",
+ fit:"When gold breaks out in either direction. Miners amplify the move, and the fund amplifies it again.",
+ care:"Two layers of amplification. It moves like a 3x fund even though it says 2x."},
+{g:"sector",bull:["FNGU","BULZ"],bear:[],lev:"3x",name:"Big tech baskets (FANG)",by:"MicroSectors, issued by Bank of Montreal",
+ what:"A small group of the biggest tech and internet names, each with a similar weight.",
+ ex:"The basket up 2%: FNGU about +6%.",
+ fit:"When the handful of mega-cap tech stocks all move together.",
+ care:"These are notes, not funds. A note is a promise by the bank to pay, so you also carry the risk of the bank itself. Very concentrated."},
+
+{g:"bond",bull:["TMF"],bear:["TMV"],lev:"3x",name:"US government bonds, 20+ years",by:"Direxion",
+ what:"Long-dated US Treasury bonds. Bond prices rise when interest rates fall, and fall when rates rise.",
+ ex:"Long-term rates drop and the bond index gains 1%: TMF about +3%, TMV about −3%.",
+ fit:"TMF when you expect long-term rates to fall (recession fear, rate cuts). TMV when you expect them to rise (inflation worries, heavy government borrowing).",
+ care:"It is a bet on interest rates, not on shares. It can move against the stock market or with it."},
+{g:"bond",bull:["TYD"],bear:["TYO"],lev:"3x",name:"US government bonds, 7 to 10 years",by:"Direxion",
+ what:"Medium-dated US Treasury bonds. They react less to rate changes than the 20+ year bonds.",
+ ex:"The bond index gains 0.5%: TYD about +1.5%.",
+ fit:"A milder version of the TMF and TMV idea, for the same rate views.",
+ care:"Very little trading. Often not worth it compared with TMF and TMV."},
+
+{g:"commodity",bull:["BOIL"],bear:["KOLD"],lev:"2x",name:"Natural gas",by:"ProShares",
+ what:"Follows natural gas futures. Driven by weather, storage levels and exports.",
+ ex:"Gas up 5% on a cold-weather forecast: BOIL about +10%, KOLD about −10%.",
+ fit:"Short trades around weather changes and the weekly US gas storage report.",
+ care:"Gas is one of the most violent markets. On top of the daily reset, the fund loses value each month when it swaps old futures for new ones. Not for holding."},
+{g:"commodity",bull:["UCO"],bear:["SCO"],lev:"2x",name:"Crude oil",by:"ProShares",
+ what:"Follows crude oil futures (the US benchmark, WTI).",
+ ex:"Oil up 3% after a production cut: UCO about +6%, SCO about −6%.",
+ fit:"Around meetings of the oil-producing countries, supply disruptions and the weekly US oil stock report.",
+ care:"Same futures-swap cost as natural gas, though usually smaller."},
+
+{g:"stock",bull:["NVDL","TSLL","MUU"],bear:[],lev:"2x",name:"Single stocks",by:"GraniteShares (NVDL), Direxion (TSLL, MUU)",
+ what:"Two times the daily move of one company: NVDL for Nvidia, TSLL for Tesla, MUU for Micron. Many more exist, including bear versions.",
+ ex:"Nvidia up 4% after earnings: NVDL about +8%.",
+ fit:"A short-term view on one company around a known event, such as its results day.",
+ care:"All the risk sits in one company. A bad report overnight can take 20 to 30% off the fund before you can sell."}
+];
+
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let cur="all";
+function chips(){
+  document.getElementById("chips").innerHTML=GROUPS.map(([k,l])=>
+    `<button class="chip" aria-pressed="${k===cur}" data-g="${k}">${l}</button>`).join("");
+}
+function cards(){
+  document.getElementById("cards").innerHTML=D.filter(x=>cur==="all"||x.g===cur).map(x=>`
+  <article class="card">
+    <div class="tk">${x.bull.map(t=>`<span class="t">${t}</span>`).join("")}${x.bear.map(t=>`<span class="t bear">${t}</span>`).join("")}<span class="lev">${x.lev}</span></div>
+    <div><h3>${esc(x.name)}</h3><div class="sub">${esc(x.by)}</div></div>
+    <p class="what">${esc(x.what)}</p>
+    <p class="ex"><b>Example.</b> ${esc(x.ex)}</p>
+    <p class="fit"><b>Suits:</b> ${esc(x.fit)}</p>
+    <p class="care"><b>Careful:</b> ${esc(x.care)}</p>
+  </article>`).join("");
+}
+document.getElementById("chips").addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;cur=b.dataset.g;chips();cards();
+});
+chips();cards();
+
+const pct=v=>(v>0?"+":v<0?"−":"")+Math.abs(v).toFixed(1)+"%";
+const cls=v=>v>0.05?"pos":v<-0.05?"neg":"";
+function calc(){
+  const a=+d1.value,b=+d2.value;
+  d1v.textContent=pct(a);d2v.textContent=pct(b);
+  const idx=((1+a/100)*(1+b/100)-1)*100;
+  const bull=((1+3*a/100)*(1+3*b/100)-1)*100;
+  const bear=((1-3*a/100)*(1-3*b/100)-1)*100;
+  [[oI,idx],[oB,bull],[oS,bear]].forEach(([el,v])=>{el.textContent=pct(v);el.className=cls(v)});
+  const drift=bull-3*idx;
+  calcNote.textContent=Math.abs(drift)<0.05
+    ?"The bull fund ends at about 3x the index."
+    :`Three times the index result would be ${pct(3*idx)}. The bull fund ends at ${pct(bull)}, which is ${Math.abs(drift).toFixed(1)} points ${drift<0?"worse":"better"}. `+
+     (a*b<0?"The days went in opposite directions, which is what causes decay.":"The days went the same way, so compounding works in the fund's favour.");
+}
+d1.addEventListener("input",calc);d2.addEventListener("input",calc);calc();
+</script>
+</body>
+</html>
